@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Jesson & Diorra — October 3, 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,400;1,500;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-dark: #120e0c;
+    --bg-surface: #1a1410;
+    --bg-card: #f9f5ed;
+    --bg-card-subtle: #f3ece0;
+    --text-main: #241c16;
+    --text-muted: #736453;
+    --gold: #c5a059;
+    --gold-light: #dfc488;
+    --gold-dim: #8e7345;
+    --gold-glow: rgba(197, 160, 89, 0.18);
+    --gold-border: rgba(197, 160, 89, 0.35);
+    --ivory: #f5efe6;
+    --ivory-dim: #a69888;
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.28);
+    --shadow-gold: 0 4px 20px rgba(197, 160, 89, 0.22);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    min-height: 100vh;
+    background-color: var(--bg-dark);
+    background-image: 
+      radial-gradient(ellipse at 50% 0%, rgba(197, 160, 89, 0.12) 0%, transparent 60%),
+      radial-gradient(circle at 10% 40%, rgba(197, 160, 89, 0.05) 0%, transparent 40%),
+      radial-gradient(circle at 90% 80%, rgba(197, 160, 89, 0.04) 0%, transparent 50%);
+    color: var(--ivory);
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    line-height: 1.5;
+    padding-bottom: calc(40px + env(safe-area-inset-bottom, 20px));
+  }
+
+  /* Header & Branding */
+  .masthead {
+    padding: 42px 20px 22px;
+    text-align: center;
+    position: relative;
+  }
+
+  .ornament {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--gold-light);
+    font-size: 0.72rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .ornament::before, .ornament::after {
+    content: '';
+    width: 24px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold));
+  }
+  .ornament::after {
+    background: linear-gradient(90deg, var(--gold), transparent);
+  }
+
+  h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(2.1rem, 7.5vw, 2.9rem);
+    line-height: 1.15;
+    color: var(--ivory);
+    letter-spacing: 0.2px;
+    text-shadow: 0 2px 14px rgba(0,0,0,0.5);
+  }
+
+  .date-venue {
+    margin-top: 6px;
+    color: var(--gold-light);
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+  }
+
+  .welcome-note {
+    max-width: 440px;
+    margin: 12px auto 0;
+    font-size: 0.92rem;
+    color: var(--ivory-dim);
+    line-height: 1.55;
+    padding: 0 8px;
+  }
+
+  /* Guest Identity Pill */
+  .guest-strip {
+    max-width: 480px;
+    margin: 16px auto 0;
+    padding: 0 16px;
+  }
+
+  .guest-badge {
+    background: rgba(197, 160, 89, 0.1);
+    border: 1px solid var(--gold-border);
+    border-radius: 30px;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.84rem;
+    backdrop-filter: blur(8px);
+  }
+
+  .guest-badge .greeting {
+    color: var(--ivory-dim);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .guest-badge .name {
+    color: var(--gold-light);
+    font-weight: 600;
+  }
+
+  .guest-badge button {
+    background: none;
+    border: none;
+    color: var(--gold);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 2px 4px;
+  }
+
+  /* Floating Segmented Nav */
+  .nav-container {
+    position: sticky;
+    top: 12px;
+    z-index: 100;
+    max-width: 500px;
+    margin: 18px auto 0;
+    padding: 0 16px;
+  }
+
+  nav {
+    display: flex;
+    background: rgba(26, 20, 16, 0.85);
+    border: 1px solid var(--gold-border);
+    border-radius: 40px;
+    padding: 4px;
+    backdrop-filter: blur(16px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.45);
+    gap: 4px;
+  }
+
+  nav button {
+    flex: 1;
+    padding: 10px 8px;
+    border: none;
+    background: transparent;
+    color: var(--ivory-dim);
+    border-radius: 30px;
+    font-size: 0.86rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.22s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+  }
+
+  nav button.active {
+    background: linear-gradient(135deg, var(--gold-light), var(--gold));
+    color: #120e0c;
+    font-weight: 700;
+    box-shadow: var(--shadow-gold);
+  }
+
+  /* Layout Container */
+  main {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 22px 16px 20px;
+  }
+
+  section {
+    display: none;
+    animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  section.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-header {
+    margin-bottom: 16px;
+    text-align: center;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.45rem;
+    font-weight: 600;
+    color: var(--ivory);
+    margin-bottom: 4px;
+  }
+
+  .section-desc {
+    color: var(--ivory-dim);
+    font-size: 0.88rem;
+    line-height: 1.5;
+  }
+
+  /* Drive Info Banner */
+  .drive-banner {
+    background: linear-gradient(135deg, rgba(197, 160, 89, 0.15), rgba(197, 160, 89, 0.05));
+    border: 1px solid var(--gold-border);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .drive-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  .drive-text {
+    flex: 1;
+    font-size: 0.84rem;
+    color: var(--ivory);
+    line-height: 1.4;
+  }
+
+  .drive-text strong {
+    color: var(--gold-light);
+    display: block;
+    font-size: 0.88rem;
+    margin-bottom: 2px;
+  }
+
+  .drive-main-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 7px 12px;
+    background: rgba(197, 160, 89, 0.2);
+    border: 1px solid var(--gold-border);
+    border-radius: 20px;
+    color: var(--gold-light);
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .drive-main-btn:hover, .drive-main-btn:active {
+    background: var(--gold);
+    color: #120e0c;
+  }
+
+  /* Photo Hunt Grid */
+  .photo-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .photo-tile {
+    position: relative;
+    background: var(--bg-card);
+    color: var(--text-main);
+    border-radius: var(--radius-md);
+    padding: 18px 14px 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 145px;
+    text-align: left;
+    border: 1px solid rgba(197, 160, 89, 0.25);
+    border-bottom: 3px solid var(--gold);
+    cursor: pointer;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.22);
+    text-decoration: none;
+  }
+
+  .photo-tile:active:not(:disabled) {
+    transform: scale(0.97);
+  }
+
+  .photo-tile.claimed {
+    background: linear-gradient(180deg, #fdfbf7, #f4ecd9);
+    border-color: var(--gold);
+  }
+
+  .photo-tile.soon {
+    background: rgba(249, 245, 237, 0.05);
+    border: 1px dashed rgba(197, 160, 89, 0.3);
+    color: var(--ivory-dim);
+    cursor: default;
+    box-shadow: none;
+  }
+
+  .tile-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .tile-emoji {
+    font-size: 2rem;
+    line-height: 1;
+    margin-bottom: 8px;
+    display: inline-block;
+  }
+
+  .claim-pill {
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 12px;
+    background: rgba(197, 160, 89, 0.18);
+    color: var(--gold-dim);
+    border: 1px solid var(--gold-border);
+  }
+
+  .photo-tile.claimed .claim-pill {
+    background: #4e8353;
+    color: #fff;
+    border: none;
+  }
+
+  .tile-title {
+    font-weight: 700;
+    font-size: 0.94rem;
+    line-height: 1.25;
+    color: var(--text-main);
+    margin-bottom: 8px;
+  }
+
+  .photo-tile.soon .tile-title {
+    color: var(--ivory-dim);
+    font-weight: 500;
+  }
+
+  .tile-action {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: var(--gold-dim);
+    margin-top: auto;
+  }
+
+  .tile-action span {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+  }
+
+  /* Prediction Cards */
+  .card {
+    background: var(--bg-card);
+    color: var(--text-main);
+    border-radius: var(--radius-md);
+    padding: 20px 18px;
+    margin-bottom: 14px;
+    border: 1px solid rgba(197, 160, 89, 0.25);
+    border-left: 4px solid var(--gold);
+    box-shadow: 0 4px 18px rgba(0,0,0,0.22);
+  }
+
+  .card-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--gold-dim);
+    margin-bottom: 4px;
+    display: block;
+  }
+
+  .card-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-bottom: 14px;
+    color: var(--text-main);
+  }
+
+  .opts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    gap: 8px;
+  }
+
+  .opt-btn {
+    padding: 11px 12px;
+    border: 1px solid #d8ccb6;
+    border-radius: var(--radius-sm);
+    background: #fff;
+    color: var(--text-main);
+    font-size: 0.88rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    text-align: center;
+  }
+
+  .opt-btn:active {
+    transform: scale(0.97);
+  }
+
+  .opt-btn.selected {
+    background: linear-gradient(135deg, var(--gold-light), var(--gold));
+    border-color: var(--gold);
+    color: #120e0c;
+    font-weight: 700;
+    box-shadow: 0 2px 10px rgba(197, 160, 89, 0.35);
+  }
+
+  .input-wrapper {
+    position: relative;
+  }
+
+  input[type="text"], input[type="number"] {
+    width: 100%;
+    min-height: 48px;
+    padding: 12px 14px;
+    border: 1px solid #d8ccb6;
+    border-radius: var(--radius-sm);
+    background: #fff;
+    color: var(--text-main);
+    font-size: 1rem;
+    font-family: inherit;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  input[type="text"]:focus, input[type="number"]:focus {
+    outline: none;
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(197, 160, 89, 0.25);
+  }
+
+  .primary-btn {
+    width: 100%;
+    min-height: 52px;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 30px;
+    background: linear-gradient(135deg, var(--gold-light), var(--gold));
+    color: #120e0c;
+    font-size: 1.02rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 6px;
+    box-shadow: var(--shadow-gold);
+    transition: transform 0.18s, box-shadow 0.18s, opacity 0.18s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .primary-btn:active {
+    transform: scale(0.98);
+  }
+
+  .primary-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  /* Live Results */
+  .results-badge-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+    padding: 0 4px;
+  }
+
+  .live-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(145, 168, 132, 0.15);
+    border: 1px solid rgba(145, 168, 132, 0.4);
+    color: #a8d596;
+    font-size: 0.74rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 4px 10px;
+    border-radius: 20px;
+  }
+
+  .live-dot {
+    width: 7px;
+    height: 7px;
+    background: #7ec468;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #7ec468;
+    animation: pulse 1.8s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.8); }
+  }
+
+  .results-total {
+    font-size: 0.8rem;
+    color: var(--ivory-dim);
+  }
+
+  .bar-container {
+    margin: 14px 0 6px;
+  }
+
+  .bar-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 6px;
+    font-size: 0.88rem;
+  }
+
+  .bar-answer {
+    font-weight: 600;
+    color: var(--text-main);
+  }
+
+  .bar-count {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--gold-dim);
+  }
+
+  .bar-bg {
+    height: 12px;
+    background: #e7ddc9;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light));
+    border-radius: 6px;
+    transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .empty-state {
+    color: var(--text-muted);
+    font-style: italic;
+    font-size: 0.9rem;
+    text-align: center;
+    padding: 10px 0;
+  }
+
+  /* Toast Notification */
+  #toast {
+    position: fixed;
+    bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: rgba(26, 20, 16, 0.94);
+    border: 1px solid var(--gold);
+    color: var(--ivory);
+    padding: 12px 22px;
+    border-radius: 30px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    backdrop-filter: blur(12px);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 999;
+    max-width: 90vw;
+    text-align: center;
+  }
+
+  #toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    color: var(--ivory-dim);
+    font-size: 0.82rem;
+    padding: 24px 20px;
+    margin-top: 20px;
+  }
+
+  footer .love {
+    color: var(--gold);
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="ornament">Celebrate With Us</div>
+  <h1>Jesson &amp; Diorra</h1>
+  <p class="date-venue">October 3, 2026 · Park Hyatt Jakarta</p>
+  <p class="welcome-note">We are so delighted to have you celebrate with us tonight. Capture memories and place your bets below!</p>
+</header>
+
+<div class="guest-strip" id="guestStrip" style="display:none;">
+  <div class="guest-badge">
+    <span class="greeting">Playing as: <span class="name" id="badgeGuestName">Guest</span></span>
+    <button type="button" onclick="editGuestName()">Change</button>
+  </div>
+</div>
+
+<div class="nav-container">
+  <nav role="tablist" aria-label="Wedding Events">
+    <button type="button" class="active" role="tab" aria-selected="true" data-tab="photos">📷 Photo Hunt</button>
+    <button type="button" role="tab" aria-selected="false" data-tab="predict">✨ Predictions</button>
+    <button type="button" role="tab" aria-selected="false" data-tab="results">📊 Live Results</button>
+  </nav>
+</div>
+
+<main>
+  <!-- TAB 1: Photo Hunt -->
+  <section id="photos" class="active" role="tabpanel">
+    <div class="section-header">
+      <h2 class="section-title">The Photo Hunt</h2>
+      <p class="section-desc">Snap photos for each category and upload them to our Google Drive. The guest with the most categories completed wins a prize!</p>
+    </div>
+
+    <div class="drive-banner">
+      <span class="drive-icon">📁</span>
+      <div class="drive-text">
+        <strong>Google Drive Upload</strong>
+        Tap any category below to open the upload folder and log your entry!
+      </div>
+      <a href="https://drive.google.com" target="_blank" rel="noopener" class="drive-main-btn" id="mainDriveLink">All Photos ↗</a>
+    </div>
+
+    <div class="photo-grid" id="photoGrid"></div>
+  </section>
+
+  <!-- TAB 2: Predictions -->
+  <section id="predict" role="tabpanel">
+    <div class="section-header">
+      <h2 class="section-title">Night Predictions</h2>
+      <p class="section-desc">Submit your guesses for tonight's memorable moments. Live standings are updated in real-time!</p>
+    </div>
+
+    <div class="card">
+      <label class="card-label" for="guestName">Guest Information</label>
+      <h3 class="card-title">What's your name?</h3>
+      <div class="input-wrapper">
+        <input type="text" id="guestName" placeholder="e.g. Jamie Tan" autocomplete="name" maxlength="100">
+      </div>
+    </div>
+
+    <div id="questionCards"></div>
+
+    <button type="button" class="primary-btn" id="submitBtn">
+      <span>Submit My Predictions</span>
+      <span>🎉</span>
+    </button>
+  </section>
+
+  <!-- TAB 3: Live Results -->
+  <section id="results" role="tabpanel">
+    <div class="section-header">
+      <h2 class="section-title">Live Predictions Board</h2>
+      <p class="section-desc">See how the whole room is guessing tonight.</p>
+    </div>
+
+    <div class="results-badge-bar">
+      <span class="live-pill"><span class="live-dot"></span> Live Standings</span>
+      <span class="results-total" id="totalVotesText">Updating...</span>
+    </div>
+
+    <div id="resultsBoard"></div>
+  </section>
+</main>
+
+<footer>
+  Made with <span class="love">♥</span> for our favourite people.
+</footer>
+
+<div id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+/* ==========================================================================
+   CONFIG & WEDDING DATA
+   ========================================================================== */
+const CONFIG = {
+  // Supabase Backend
+  supabaseUrl: "https://oywrvzfqxduofnhqcizg.supabase.co",
+  supabaseAnonKey: "sb_publishable_j5CmO4bjYp5YH4edhd7eGg_cwtXMOKP",
+
+  // Main Google Drive Folder Link for guests
+  mainGoogleDriveFolder: "https://drive.google.com/drive/folders/1rSQcuy3yNZgb6IzYOsBMlisbXov4YGLZ?usp=drive_link",
+
+  // Photo Hunt Categories with dedicated Google Drive folder links (or fallback to main link)
+  photoCategories: [
+    {
+      emoji: "💋",
+      name: "Bride & Groom Kissing",
+      slug: "bride-groom-kissing",
+      driveLink: ""
+    },
+    {
+      emoji: "🍽️",
+      name: "Mouthful of Food",
+      slug: "mouthful-of-food",
+      driveLink: ""
+    },
+    {
+      emoji: "🏃",
+      name: "Kids Running Around",
+      slug: "kids-running-around",
+      driveLink: ""
+    },
+    {
+      emoji: "🤳",
+      name: "Paparazzi Shot",
+      slug: "paparazzi-shot",
+      driveLink: ""
+    },
+    {
+      emoji: "✨",
+      name: "General Photos",
+      slug: "general-photos",
+      driveLink: ""
+    },
+    {
+      emoji: "➕",
+      name: "More Coming Soon",
+      slug: "",
+      soon: true,
+      driveLink: ""
+    }
+  ],
+
+  // Prediction Questions
+  questions: [
+    {
+      id: "cry_first",
+      text: "Who will cry first?",
+      type: "choice",
+      options: ["Bride's Mom", "Bride's Dad", "Groom's Mom", "Groom's Dad"]
+    },
+    {
+      id: "speech_len",
+      text: "How long will the best friend's speech be?",
+      type: "choice",
+      options: ["2 min", "3 min", "4 min"]
+    },
+    {
+      id: "courses",
+      text: "How many courses will dinner have?",
+      type: "number"
+    },
+    {
+      id: "fruit",
+      text: "How many pieces of fruit on the dessert table?",
+      type: "number"
+    }
+  ]
+};
+
+/* ==========================================================================
+   INITIALIZATION & STATE
+   ========================================================================== */
+const isSupabaseConfigured = CONFIG.supabaseUrl.startsWith("https://") &&
+  !CONFIG.supabaseUrl.includes("PASTE_") &&
+  !CONFIG.supabaseAnonKey.includes("PASTE_");
+
+const db = isSupabaseConfigured && window.supabase ?
+  window.supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseAnonKey) : null;
+
+const nameInput = document.getElementById("guestName");
+const guestStrip = document.getElementById("guestStrip");
+const badgeGuestName = document.getElementById("badgeGuestName");
+const mainDriveLink = document.getElementById("mainDriveLink");
+
+if (mainDriveLink && CONFIG.mainGoogleDriveFolder && !CONFIG.mainGoogleDriveFolder.includes("PASTE_")) {
+  mainDriveLink.href = CONFIG.mainGoogleDriveFolder;
+}
+
+let toastTimer;
+let refreshTimer;
+
+// Load stored claimed categories for this session
+function getClaimedCategories() {
+  try {
+    return JSON.parse(sessionStorage.getItem("weddingClaimedPhotos") || "[]");
+  } catch {
+    return [];
+  }
+}
+
+function saveClaimedCategory(categoryName) {
+  const current = getClaimedCategories();
+  if (!current.includes(categoryName)) {
+    current.push(categoryName);
+    sessionStorage.setItem("weddingClaimedPhotos", JSON.stringify(current));
+  }
+}
+
+// Guest Name Sync
+function updateGuestNameUI() {
+  const name = sessionStorage.getItem("weddingGuestName") || nameInput.value.trim();
+  if (name) {
+    nameInput.value = name;
+    badgeGuestName.textContent = name;
+    guestStrip.style.display = "block";
+  } else {
+    guestStrip.style.display = "none";
+  }
+}
+
+nameInput.addEventListener("input", () => {
+  const name = nameInput.value.trim();
+  if (name) sessionStorage.setItem("weddingGuestName", name);
+  else sessionStorage.removeItem("weddingGuestName");
+  updateGuestNameUI();
+});
+
+function editGuestName() {
+  const newName = window.prompt("Update your name:", sessionStorage.getItem("weddingGuestName") || "");
+  if (newName !== null) {
+    const clean = newName.trim();
+    if (clean) {
+      sessionStorage.setItem("weddingGuestName", clean);
+      nameInput.value = clean;
+    } else {
+      sessionStorage.removeItem("weddingGuestName");
+      nameInput.value = "";
+    }
+    updateGuestNameUI();
+  }
+}
+
+function getGuestName() {
+  let name = (nameInput.value.trim() || sessionStorage.getItem("weddingGuestName") || "").trim();
+  if (!name) {
+    const promptName = window.prompt("What is your name? (So you're entered in the Photo Hunt prize!)");
+    if (promptName && promptName.trim()) {
+      name = promptName.trim();
+      sessionStorage.setItem("weddingGuestName", name);
+      nameInput.value = name;
+      updateGuestNameUI();
+    }
+  }
+  return name;
+}
+
+function toast(message) {
+  const node = document.getElementById("toast");
+  node.textContent = message;
+  node.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => node.classList.remove("show"), 3200);
+}
+
+/* ==========================================================================
+   PHOTO HUNT RENDER & GOOGLE DRIVE FLOW
+   ========================================================================== */
+function buildPhotoTiles() {
+  const grid = document.getElementById("photoGrid");
+  grid.innerHTML = "";
+  const claimedList = getClaimedCategories();
+
+  CONFIG.photoCategories.forEach(category => {
+    const tile = document.createElement("button");
+    tile.type = "button";
+    const isClaimed = claimedList.includes(category.name);
+    tile.className = `photo-tile${category.soon ? " soon" : ""}${isClaimed ? " claimed" : ""}`;
+    tile.disabled = Boolean(category.soon);
+
+    const top = document.createElement("div");
+    top.className = "tile-top";
+
+    const emoji = document.createElement("span");
+    emoji.className = "tile-emoji";
+    emoji.textContent = category.emoji;
+    top.appendChild(emoji);
+
+    if (!category.soon) {
+      const pill = document.createElement("span");
+      pill.className = "claim-pill";
+      pill.textContent = isClaimed ? "✓ Uploaded" : "Tap to Open";
+      top.appendChild(pill);
+    }
+
+    const title = document.createElement("div");
+    title.className = "tile-title";
+    title.textContent = category.name;
+
+    const action = document.createElement("div");
+    action.className = "tile-action";
+    if (category.soon) {
+      action.innerHTML = `<span>Coming soon</span>`;
+    } else {
+      action.innerHTML = `<span>Google Drive</span><span>↗</span>`;
+    }
+
+    tile.append(top, title, action);
+
+    if (!category.soon) {
+      tile.addEventListener("click", () => handlePhotoCategoryClick(category));
+    }
+
+    grid.appendChild(tile);
+  });
+}
+
+async function handlePhotoCategoryClick(category) {
+  const name = getGuestName();
+  if (!name) return;
+
+  // Determine Google Drive link
+  let targetUrl = category.driveLink;
+  if (!targetUrl || targetUrl.includes("PASTE_")) {
+    targetUrl = (!CONFIG.mainGoogleDriveFolder.includes("PASTE_")) ?
+      CONFIG.mainGoogleDriveFolder : "https://drive.google.com";
+  }
+
+  // Record claim in local storage & mark UI
+  saveClaimedCategory(category.name);
+  buildPhotoTiles();
+
+  // Log claim to Supabase asynchronously if configured
+  if (db) {
+    db.from("photo_claims").insert({ guest_name: name, category: category.name })
+      .then(({ error }) => {
+        if (error) console.warn("Claim log note:", error.message);
+      });
+  }
+
+  toast(`Opening Drive for "${category.name}"… Claim logged! 🎉`);
+  
+  // Open Google Drive in new tab
+  setTimeout(() => {
+    window.open(targetUrl, "_blank", "noopener,noreferrer");
+  }, 400);
+}
+
+/* ==========================================================================
+   PREDICTIONS RENDER & SUBMIT
+   ========================================================================== */
+function buildQuestions() {
+  const wrap = document.getElementById("questionCards");
+  wrap.innerHTML = "";
+
+  CONFIG.questions.forEach((q, idx) => {
+    const card = document.createElement("div");
+    card.className = "card";
+
+    const label = document.createElement("span");
+    label.className = "card-label";
+    label.textContent = `Question ${idx + 1}`;
+
+    const title = document.createElement("h3");
+    title.className = "card-title";
+    title.textContent = q.text;
+
+    card.append(label, title);
+
+    if (q.type === "choice") {
+      const grid = document.createElement("div");
+      grid.className = "opts-grid";
+      grid.dataset.qid = q.id;
+
+      q.options.forEach(opt => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "opt-btn";
+        btn.textContent = opt;
+        btn.addEventListener("click", () => {
+          grid.querySelectorAll(".opt-btn").forEach(b => b.classList.remove("selected"));
+          btn.classList.add("selected");
+        });
+        grid.appendChild(btn);
+      });
+      card.appendChild(grid);
+    } else {
+      const input = document.createElement("input");
+      input.type = "number";
+      input.id = `q_${q.id}`;
+      input.placeholder = "Enter number";
+      input.min = "0";
+      card.appendChild(input);
+    }
+
+    wrap.appendChild(card);
+  });
+}
+
+document.getElementById("submitBtn").addEventListener("click", async event => {
+  if (!db) {
+    toast("Supabase connection required to save live predictions.");
+    return;
+  }
+
+  const name = getGuestName();
+  if (!name) {
+    toast("Please enter your name first!");
+    return;
+  }
+
+  const answers = [];
+  CONFIG.questions.forEach(q => {
+    let val = "";
+    if (q.type === "choice") {
+      val = document.querySelector(`.opts-grid[data-qid="${q.id}"] .opt-btn.selected`)?.textContent || "";
+    } else {
+      val = document.getElementById(`q_${q.id}`).value.trim();
+    }
+    if (val !== "") {
+      answers.push({ guest_name: name, question_id: q.id, answer: val });
+    }
+  });
+
+  if (answers.length === 0) {
+    toast("Please pick or enter at least one prediction!");
+    return;
+  }
+
+  const btn = event.currentTarget;
+  btn.disabled = true;
+  btn.innerHTML = "<span>Submitting…</span>";
+
+  const { error } = await db.from("predictions").insert(answers);
+  btn.disabled = false;
+  btn.innerHTML = "<span>Submit My Predictions</span><span>🎉</span>";
+
+  if (error) {
+    toast(`Error saving guesses: ${error.message}`);
+  } else {
+    toast("Predictions submitted! Good luck 🎉");
+    // Switch to results tab to show their vote
+    document.querySelector('nav [data-tab="results"]').click();
+  }
+});
+
+/* ==========================================================================
+   LIVE RESULTS BOARD
+   ========================================================================== */
+async function loadResults() {
+  const board = document.getElementById("resultsBoard");
+  const totalText = document.getElementById("totalVotesText");
+
+  if (!db) {
+    board.innerHTML = `<div class="card"><p class="empty-state">Connect Supabase to view live results.</p></div>`;
+    totalText.textContent = "Offline";
+    return;
+  }
+
+  const { data, error } = await db.from("predictions").select("question_id, answer");
+  if (error) {
+    board.innerHTML = `<div class="card"><p class="empty-state">Unable to load live results.</p></div>`;
+    return;
+  }
+
+  totalText.textContent = `${data.length} total guesses`;
+  board.innerHTML = "";
+
+  CONFIG.questions.forEach((q, idx) => {
+    const card = document.createElement("div");
+    card.className = "card";
+
+    const label = document.createElement("span");
+    label.className = "card-label";
+    label.textContent = `Question ${idx + 1}`;
+
+    const title = document.createElement("h3");
+    title.className = "card-title";
+    title.textContent = q.text;
+
+    card.append(label, title);
+
+    const questionRows = data.filter(d => d.question_id === q.id);
+    const countMap = {};
+    questionRows.forEach(r => {
+      countMap[r.answer] = (countMap[r.answer] || 0) + 1;
+    });
+
+    const entries = Object.entries(countMap).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+    const total = entries.reduce((acc, curr) => acc + curr[1], 0);
+
+    if (entries.length === 0) {
+      const empty = document.createElement("p");
+      empty.className = "empty-state";
+      empty.textContent = "No predictions yet. Be the first!";
+      card.appendChild(empty);
+    } else {
+      entries.forEach(([ans, count]) => {
+        const pct = total > 0 ? Math.round((count / total) * 100) : 0;
+        const container = document.createElement("div");
+        container.className = "bar-container";
+        container.innerHTML = `
+          <div class="bar-info">
+            <span class="bar-answer">${ans}</span>
+            <span class="bar-count">${count} guess${count > 1 ? 'es' : ''} (${pct}%)</span>
+          </div>
+          <div class="bar-bg">
+            <div class="bar-fill" style="width: ${pct}%"></div>
+          </div>
+        `;
+        card.appendChild(container);
+      });
+    }
+
+    board.appendChild(card);
+  });
+}
+
+/* ==========================================================================
+   NAVIGATION & TABS
+   ========================================================================== */
+document.querySelectorAll("nav [role=tab]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll("nav [role=tab]").forEach(b => {
+      const isActive = b === btn;
+      b.classList.toggle("active", isActive);
+      b.setAttribute("aria-selected", String(isActive));
+    });
+
+    document.querySelectorAll("main [role=tabpanel]").forEach(panel => {
+      panel.classList.toggle("active", panel.id === btn.dataset.tab);
+    });
+
+    clearInterval(refreshTimer);
+    if (btn.dataset.tab === "results") {
+      loadResults();
+      refreshTimer = setInterval(loadResults, 12000);
+    }
+  });
+});
+
+/* ==========================================================================
+   PAGE BOOTSTRAP
+   ========================================================================== */
+updateGuestNameUI();
+buildPhotoTiles();
+buildQuestions();
+
+if (db) {
+  db.channel("prediction-channel")
+    .on("postgres_changes", { event: "*", schema: "public", table: "predictions" }, () => {
+      if (document.getElementById("results").classList.contains("active")) {
+        loadResults();
+      }
+    })
+    .subscribe();
+}
+</script>
+</body>
+</html>
+
