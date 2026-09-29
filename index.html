@@ -203,6 +203,44 @@
     max-width: 500px;
     margin: 0 auto;
     padding: 22px 16px 20px;
+    transition: max-width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* Wide screen mode when enabled or on desktop large monitors */
+  body.wide-view main {
+    max-width: 1040px;
+  }
+
+  body.wide-view .nav-container {
+    max-width: 680px;
+  }
+
+  body.wide-view #resultsBoard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    gap: 16px;
+    align-items: start;
+  }
+
+  body.wide-view #predict #questionCards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    gap: 14px;
+    margin-bottom: 8px;
+  }
+
+  body.wide-view #predict #questionCards .card {
+    margin-bottom: 0;
+  }
+
+  body.wide-view #photos .photo-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+  }
+
+  body.wide-view #resultsBoard .card {
+    margin-bottom: 0;
+    height: 100%;
   }
 
   section {
@@ -546,11 +584,33 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
   }
 
   .results-total {
     font-size: 0.8rem;
     color: var(--ivory-dim);
+  }
+
+  .view-toggle-btn {
+    background: rgba(197, 160, 89, 0.15);
+    border: 1px solid var(--gold-border);
+    color: var(--gold-light);
+    border-radius: 20px;
+    padding: 3px 9px;
+    font-size: 0.74rem;
+    cursor: pointer;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.2s;
+  }
+
+  .view-toggle-btn:hover, .view-toggle-btn:active {
+    background: var(--gold);
+    color: #120e0c;
   }
 
   .refresh-btn {
@@ -562,6 +622,12 @@
     font-size: 0.74rem;
     cursor: pointer;
     font-weight: 600;
+    transition: all 0.2s;
+  }
+
+  .refresh-btn:hover, .refresh-btn:active {
+    background: var(--gold);
+    color: #120e0c;
   }
 
   .bar-container {
@@ -729,6 +795,7 @@
       <span class="live-pill"><span class="live-dot"></span> Live Standings</span>
       <div class="results-meta">
         <span class="results-total" id="totalVotesText">Updating...</span>
+        <button type="button" class="view-toggle-btn" id="wideToggleBtn" onclick="toggleWideView()">⤢ Wide View</button>
         <button type="button" class="refresh-btn" onclick="loadResults()">↻ Refresh</button>
       </div>
     </div>
@@ -1198,6 +1265,30 @@ document.querySelectorAll("nav [role=tab]").forEach(btn => {
     }
   });
 });
+
+/* ==========================================================================
+   VIEW TOGGLE (WIDE SCREEN / MOBILE)
+   ========================================================================== */
+function toggleWideView() {
+  const isWide = document.body.classList.toggle('wide-view');
+  localStorage.setItem('weddingWideResults', isWide ? 'true' : 'false');
+  updateWideToggleBtn();
+}
+
+function updateWideToggleBtn() {
+  const btn = document.getElementById('wideToggleBtn');
+  if (!btn) return;
+  const isWide = document.body.classList.contains('wide-view');
+  btn.innerHTML = isWide ? '⤡ Compact View' : '⤢ Wide View';
+  btn.setAttribute('aria-pressed', isWide ? 'true' : 'false');
+}
+
+// Auto-enable wide view on desktop screens (>= 900px) unless user manually opted out
+if (localStorage.getItem('weddingWideResults') === 'true' || 
+    (localStorage.getItem('weddingWideResults') === null && window.innerWidth >= 900)) {
+  document.body.classList.add('wide-view');
+}
+updateWideToggleBtn();
 
 /* ==========================================================================
    PAGE BOOTSTRAP
