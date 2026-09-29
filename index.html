@@ -44,18 +44,19 @@
     min-height: 100vh;
     background-color: var(--bg-dark);
     background-image: 
-      radial-gradient(ellipse at 50% 0%, rgba(197, 160, 89, 0.12) 0%, transparent 60%),
+      radial-gradient(ellipse at 50% 0%, rgba(197, 160, 89, 0.14) 0%, transparent 60%),
       radial-gradient(circle at 10% 40%, rgba(197, 160, 89, 0.05) 0%, transparent 40%),
       radial-gradient(circle at 90% 80%, rgba(197, 160, 89, 0.04) 0%, transparent 50%);
     color: var(--ivory);
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     line-height: 1.5;
     padding-bottom: calc(40px + env(safe-area-inset-bottom, 20px));
+    touch-action: manipulation;
   }
 
   /* Header & Branding */
   .masthead {
-    padding: 42px 20px 22px;
+    padding: 44px 20px 22px;
     text-align: center;
     position: relative;
   }
@@ -163,7 +164,7 @@
 
   nav {
     display: flex;
-    background: rgba(26, 20, 16, 0.85);
+    background: rgba(26, 20, 16, 0.88);
     border: 1px solid var(--gold-border);
     border-radius: 40px;
     padding: 4px;
@@ -174,7 +175,8 @@
 
   nav button {
     flex: 1;
-    padding: 10px 8px;
+    min-height: 42px;
+    padding: 8px;
     border: none;
     background: transparent;
     color: var(--ivory-dim);
@@ -269,12 +271,12 @@
     align-items: center;
     justify-content: center;
     gap: 6px;
-    padding: 7px 12px;
-    background: rgba(197, 160, 89, 0.2);
+    padding: 8px 14px;
+    background: rgba(197, 160, 89, 0.22);
     border: 1px solid var(--gold-border);
     border-radius: 20px;
     color: var(--gold-light);
-    font-size: 0.78rem;
+    font-size: 0.8rem;
     font-weight: 600;
     text-decoration: none;
     white-space: nowrap;
@@ -303,7 +305,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    min-height: 145px;
+    min-height: 148px;
     text-align: left;
     border: 1px solid rgba(197, 160, 89, 0.25);
     border-bottom: 3px solid var(--gold);
@@ -425,7 +427,8 @@
   }
 
   .opt-btn {
-    padding: 11px 12px;
+    min-height: 44px;
+    padding: 10px 12px;
     border: 1px solid #d8ccb6;
     border-radius: var(--radius-sm);
     background: #fff;
@@ -539,9 +542,26 @@
     50% { opacity: 0.4; transform: scale(0.8); }
   }
 
+  .results-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
   .results-total {
     font-size: 0.8rem;
     color: var(--ivory-dim);
+  }
+
+  .refresh-btn {
+    background: rgba(197, 160, 89, 0.15);
+    border: 1px solid var(--gold-border);
+    color: var(--gold-light);
+    border-radius: 20px;
+    padding: 3px 8px;
+    font-size: 0.74rem;
+    cursor: pointer;
+    font-weight: 600;
   }
 
   .bar-container {
@@ -586,7 +606,7 @@
     font-style: italic;
     font-size: 0.9rem;
     text-align: center;
-    padding: 10px 0;
+    padding: 12px 0;
   }
 
   /* Toast Notification */
@@ -669,7 +689,7 @@
         <strong>Google Drive Upload</strong>
         Tap any category below to open the upload folder and log your entry!
       </div>
-      <a href="https://drive.google.com" target="_blank" rel="noopener" class="drive-main-btn" id="mainDriveLink">All Photos ↗</a>
+      <a href="https://drive.google.com/drive/folders/1rSQcuy3yNZgb6IzYOsBMlisbXov4YGLZ?usp=drive_link" target="_blank" rel="noopener" class="drive-main-btn" id="mainDriveLink">All Photos ↗</a>
     </div>
 
     <div class="photo-grid" id="photoGrid"></div>
@@ -707,7 +727,10 @@
 
     <div class="results-badge-bar">
       <span class="live-pill"><span class="live-dot"></span> Live Standings</span>
-      <span class="results-total" id="totalVotesText">Updating...</span>
+      <div class="results-meta">
+        <span class="results-total" id="totalVotesText">Updating...</span>
+        <button type="button" class="refresh-btn" onclick="loadResults()">↻ Refresh</button>
+      </div>
     </div>
 
     <div id="resultsBoard"></div>
@@ -1020,6 +1043,8 @@ function buildQuestions() {
     } else {
       const input = document.createElement("input");
       input.type = "number";
+      input.inputMode = "numeric";
+      input.pattern = "[0-9]*";
       input.id = `q_${q.id}`;
       input.placeholder = "Enter number";
       input.min = "0";
@@ -1164,6 +1189,8 @@ document.querySelectorAll("nav [role=tab]").forEach(btn => {
       panel.classList.toggle("active", panel.id === btn.dataset.tab);
     });
 
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
     clearInterval(refreshTimer);
     if (btn.dataset.tab === "results") {
       loadResults();
@@ -1191,4 +1218,3 @@ if (db) {
 </script>
 </body>
 </html>
-
