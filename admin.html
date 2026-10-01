@@ -1,0 +1,1407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#120e0c">
+<title>Admin &amp; MC Leaderboard — Jesson &amp; Diorra</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-dark: #120e0c;
+    --bg-surface: #1a1410;
+    --bg-card: #f9f5ed;
+    --bg-card-subtle: #f3ece0;
+    --text-main: #241c16;
+    --text-muted: #736453;
+    --gold: #c5a059;
+    --gold-light: #dfc488;
+    --gold-dim: #8e7345;
+    --gold-glow: rgba(197, 160, 89, 0.18);
+    --gold-border: rgba(197, 160, 89, 0.35);
+    --ivory: #f5efe6;
+    --ivory-dim: #a69888;
+    --green: #4e8353;
+    --red: #a84848;
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.28);
+    --shadow-gold: 0 4px 20px rgba(197, 160, 89, 0.25);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    min-height: 100vh;
+    background-color: var(--bg-dark);
+    background-image: 
+      radial-gradient(ellipse at 50% 0%, rgba(197, 160, 89, 0.14) 0%, transparent 60%),
+      radial-gradient(circle at 10% 40%, rgba(197, 160, 89, 0.05) 0%, transparent 40%),
+      radial-gradient(circle at 90% 80%, rgba(197, 160, 89, 0.04) 0%, transparent 50%);
+    color: var(--ivory);
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    line-height: 1.5;
+    padding-bottom: 50px;
+  }
+
+  /* PIN Gate Overlay */
+  #pinGate {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    background: var(--bg-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .pin-card {
+    background: var(--bg-card);
+    color: var(--text-main);
+    border: 1px solid var(--gold);
+    border-radius: var(--radius-lg);
+    padding: 32px 24px;
+    max-width: 380px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 16px 40px rgba(0,0,0,0.5), 0 0 30px rgba(197, 160, 89, 0.2);
+  }
+
+  .pin-card h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.6rem;
+    margin-bottom: 6px;
+  }
+
+  .pin-card p {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+  }
+
+  .pin-input {
+    width: 100%;
+    font-size: 1.6rem;
+    text-align: center;
+    letter-spacing: 12px;
+    padding: 12px;
+    border: 2px solid #d8ccb6;
+    border-radius: var(--radius-md);
+    background: #fff;
+    color: var(--text-main);
+    margin-bottom: 16px;
+    font-weight: 700;
+  }
+
+  .pin-input:focus {
+    outline: none;
+    border-color: var(--gold);
+  }
+
+  /* Header */
+  .admin-header {
+    padding: 32px 20px 18px;
+    text-align: center;
+    border-bottom: 1px solid var(--gold-border);
+    background: rgba(18, 14, 12, 0.85);
+    backdrop-filter: blur(12px);
+  }
+
+  .badge-admin {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(197, 160, 89, 0.18);
+    border: 1px solid var(--gold);
+    color: var(--gold-light);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 8px;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic;
+    font-size: clamp(1.8rem, 6vw, 2.4rem);
+    color: var(--ivory);
+    margin-bottom: 4px;
+  }
+
+  .admin-subtitle {
+    color: var(--ivory-dim);
+    font-size: 0.85rem;
+  }
+
+  /* Navigation Bar */
+  .nav-wrap {
+    max-width: 900px;
+    margin: 18px auto 0;
+    padding: 0 16px;
+  }
+
+  .admin-nav {
+    display: flex;
+    background: rgba(26, 20, 16, 0.88);
+    border: 1px solid var(--gold-border);
+    border-radius: 40px;
+    padding: 4px;
+    backdrop-filter: blur(16px);
+    gap: 4px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .admin-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .admin-nav button {
+    flex: 1 0 auto;
+    min-width: 130px;
+    min-height: 44px;
+    padding: 8px 14px;
+    border: none;
+    background: transparent;
+    color: var(--ivory-dim);
+    border-radius: 30px;
+    font-size: 0.84rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.22s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    white-space: nowrap;
+  }
+
+  .admin-nav button.active {
+    background: linear-gradient(135deg, var(--gold-light), var(--gold));
+    color: #120e0c;
+    font-weight: 700;
+    box-shadow: var(--shadow-gold);
+  }
+
+  /* Layout Container */
+  main {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 24px 16px 40px;
+  }
+
+  .tab-section {
+    display: none;
+    animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .tab-section.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(197, 160, 89, 0.25);
+  }
+
+  .panel-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.45rem;
+    font-weight: 600;
+  }
+
+  .panel-desc {
+    color: var(--ivory-dim);
+    font-size: 0.85rem;
+    margin-top: 2px;
+  }
+
+  /* Buttons */
+  .btn {
+    min-height: 42px;
+    padding: 9px 16px;
+    border-radius: 24px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+
+  .btn-gold {
+    background: linear-gradient(135deg, var(--gold-light), var(--gold));
+    color: #120e0c;
+    font-weight: 700;
+  }
+
+  .btn-outline {
+    background: rgba(197, 160, 89, 0.15);
+    border: 1px solid var(--gold-border);
+    color: var(--gold-light);
+  }
+
+  .btn-outline:hover, .btn-outline:active {
+    background: var(--gold);
+    color: #120e0c;
+  }
+
+  .btn-danger {
+    background: rgba(168, 72, 72, 0.2);
+    border: 1px solid var(--red);
+    color: #ff9e9e;
+  }
+
+  .btn-danger:hover, .btn-danger:active {
+    background: var(--red);
+    color: #fff;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--bg-card);
+    color: var(--text-main);
+    border-radius: var(--radius-md);
+    padding: 20px 18px;
+    margin-bottom: 16px;
+    border: 1px solid rgba(197, 160, 89, 0.25);
+    border-left: 4px solid var(--gold);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .q-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+  }
+
+  .q-card {
+    background: var(--bg-card);
+    color: var(--text-main);
+    border-radius: var(--radius-md);
+    padding: 18px;
+    border: 1px solid rgba(197, 160, 89, 0.3);
+    border-left: 4px solid var(--gold-dim);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.22);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .q-card.settled {
+    border-left-color: var(--green);
+    background: linear-gradient(180deg, #fdfcf9, #f4ecd9);
+  }
+
+  .q-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .q-num {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    letter-spacing: 1px;
+  }
+
+  .q-status {
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 12px;
+    background: rgba(0,0,0,0.06);
+    color: var(--text-muted);
+  }
+
+  .q-card.settled .q-status {
+    background: #e1efe2;
+    color: #2b6131;
+    border: 1px solid rgba(43, 97, 49, 0.3);
+  }
+
+  .q-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.08rem;
+    font-weight: 600;
+    margin-bottom: 14px;
+    line-height: 1.35;
+  }
+
+  .opt-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+
+  .opt-btn {
+    min-height: 44px;
+    padding: 10px 14px;
+    border: 1px solid #d8ccb6;
+    border-radius: var(--radius-sm);
+    background: #fff;
+    color: var(--text-main);
+    font-size: 0.88rem;
+    font-weight: 500;
+    cursor: pointer;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.18s ease;
+  }
+
+  .opt-btn:active {
+    transform: scale(0.98);
+  }
+
+  .opt-btn.correct {
+    background: linear-gradient(135deg, #dcf3df, #c6e9cc);
+    border-color: #4e8353;
+    color: #19461d;
+    font-weight: 700;
+    box-shadow: 0 2px 10px rgba(78, 131, 83, 0.2);
+  }
+
+  .opt-btn .check-mark {
+    display: none;
+    font-weight: bold;
+  }
+
+  .opt-btn.correct .check-mark {
+    display: inline;
+  }
+
+  .q-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 10px;
+    border-top: 1px dashed rgba(197, 160, 89, 0.4);
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-top: auto;
+  }
+
+  .unsettle-btn {
+    background: none;
+    border: none;
+    color: var(--red);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 4px 6px;
+  }
+
+  /* MC Podium & Leaderboard */
+  .podium-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .podium-card {
+    background: var(--bg-card);
+    color: var(--text-main);
+    border-radius: var(--radius-md);
+    padding: 24px 18px;
+    text-align: center;
+    box-shadow: var(--shadow-soft);
+    position: relative;
+    border: 2px solid transparent;
+  }
+
+  .podium-card.gold {
+    border-color: var(--gold);
+    background: linear-gradient(180deg, #fffdf8, #f8efe0);
+    box-shadow: 0 10px 30px rgba(197, 160, 89, 0.35);
+  }
+
+  .podium-card.silver {
+    border-color: #b5bcc4;
+    background: linear-gradient(180deg, #fbfbfb, #eff1f3);
+  }
+
+  .podium-card.bronze {
+    border-color: #cda27a;
+    background: linear-gradient(180deg, #fdfbf9, #f7ede3);
+  }
+
+  .podium-crown {
+    font-size: 2.4rem;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .podium-place {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--gold-dim);
+    margin-bottom: 6px;
+  }
+
+  .podium-name {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 6px;
+    word-break: break-word;
+  }
+
+  .podium-score {
+    display: inline-block;
+    padding: 4px 12px;
+    background: rgba(197, 160, 89, 0.2);
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #120e0c;
+  }
+
+  /* Responsive Media Queries */
+  @media (max-width: 600px) {
+    .admin-header {
+      padding: 24px 16px 14px;
+    }
+    h1 {
+      font-size: 1.75rem;
+    }
+    .panel-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .podium-container {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    .podium-card {
+      padding: 18px 14px;
+    }
+    .photo-rank-card {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .photo-count {
+      align-self: flex-end;
+    }
+  }
+
+  /* Leaderboard Table */
+  .table-card {
+    background: var(--bg-card);
+    color: var(--text-main);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+    text-align: left;
+  }
+
+  th {
+    background: #eee4d1;
+    padding: 12px 16px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--gold-dim);
+    font-weight: 700;
+  }
+
+  td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #e8decb;
+  }
+
+  tr:hover {
+    background: #fdfbf7;
+  }
+
+  .rank-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #e3d7c3;
+    font-weight: 700;
+    font-size: 0.78rem;
+  }
+
+  .rank-1 .rank-pill { background: var(--gold); color: #120e0c; }
+  .rank-2 .rank-pill { background: #bcc4cc; color: #120e0c; }
+  .rank-3 .rank-pill { background: #dcb38f; color: #120e0c; }
+
+  /* Photo Leaderboard */
+  .photo-rank-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    background: #fff;
+    border: 1px solid rgba(197, 160, 89, 0.25);
+    border-radius: var(--radius-sm);
+    margin-bottom: 8px;
+  }
+
+  .photo-user {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .photo-count {
+    font-weight: 700;
+    color: var(--gold-dim);
+    font-size: 0.92rem;
+  }
+
+  .category-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 4px;
+  }
+
+  .cat-tag {
+    font-size: 0.7rem;
+    padding: 2px 6px;
+    background: #f0e6d4;
+    border-radius: 8px;
+    color: #4a3e30;
+  }
+
+  /* Controls Switch */
+  .switch-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 0;
+    border-bottom: 1px solid #e8decb;
+  }
+
+  .switch-label strong {
+    display: block;
+    font-size: 0.95rem;
+    color: var(--text-main);
+  }
+
+  .switch-label span {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+  }
+
+  /* Toggle Slider */
+  .toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 28px;
+  }
+
+  .toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #ccc;
+    transition: .3s;
+    border-radius: 34px;
+  }
+
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .3s;
+    border-radius: 50%;
+  }
+
+  input:checked + .slider {
+    background-color: var(--gold);
+  }
+
+  input:checked + .slider:before {
+    transform: translateX(22px);
+  }
+
+  /* Presentation Mode */
+  body.presentation-mode .admin-header,
+  body.presentation-mode .nav-wrap,
+  body.presentation-mode .panel-header {
+    display: none;
+  }
+
+  body.presentation-mode .podium-card {
+    padding: 40px 24px;
+  }
+
+  body.presentation-mode .podium-name {
+    font-size: 2.2rem;
+  }
+
+  body.presentation-mode .podium-score {
+    font-size: 1.4rem;
+    padding: 8px 20px;
+  }
+
+  .exit-presentation-btn {
+    display: none;
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    z-index: 1000;
+  }
+
+  body.presentation-mode .exit-presentation-btn {
+    display: block;
+  }
+
+  /* Toast Notification */
+  #toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: rgba(26, 20, 16, 0.95);
+    border: 1px solid var(--gold);
+    color: var(--ivory);
+    padding: 12px 22px;
+    border-radius: 30px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    backdrop-filter: blur(12px);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 9999;
+    max-width: 90vw;
+    text-align: center;
+  }
+
+  #toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<!-- PIN GATE OVERLAY -->
+<div id="pinGate">
+  <div class="pin-card">
+    <div style="font-size: 2.2rem; margin-bottom: 8px;">🔐</div>
+    <h2>Admin Access</h2>
+    <p>Enter the 4-digit host PIN to manage predictions, view MC leaderboard, and track photo claims.</p>
+    <input type="password" id="pinInput" class="pin-input" maxlength="4" placeholder="••••" inputmode="numeric" pattern="[0-9]*" autofocus>
+    <button type="button" class="btn btn-gold" style="width:100%; justify-content:center; min-height:46px;" onclick="verifyPin()">Unlock Dashboard</button>
+  </div>
+</div>
+
+<!-- PRESENTATION EXIT BUTTON -->
+<button type="button" class="btn btn-outline exit-presentation-btn" onclick="togglePresentationMode()">✕ Exit Fullscreen</button>
+
+<header class="admin-header">
+  <span class="badge-admin">Private Control Console</span>
+  <h1>Jesson &amp; Diorra</h1>
+  <p class="admin-subtitle">October 3, 2026 · Park Hyatt Jakarta · Master Game Control</p>
+</header>
+
+<div class="nav-wrap">
+  <nav class="admin-nav" role="tablist">
+    <button type="button" class="active" data-tab="tabSettle">🎯 Settle Predictions (<span id="settledCountText">0/10</span>)</button>
+    <button type="button" data-tab="tabLeaderboard">🏆 MC Leaderboard</button>
+    <button type="button" data-tab="tabPhotos">📷 Photo Hunt Tally</button>
+    <button type="button" data-tab="tabSettings">⚙️ Market Controls</button>
+  </nav>
+</div>
+
+<main>
+  <!-- TAB 1: SETTLE PREDICTIONS -->
+  <section id="tabSettle" class="tab-section active">
+    <div class="panel-header">
+      <div>
+        <h2 class="panel-title">Settle Prediction Answers</h2>
+        <p class="panel-desc">Tap the correct outcome for each question as they unfold during the night. Scores update instantly.</p>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <button type="button" class="btn btn-outline" onclick="loadAllData()">↻ Refresh</button>
+      </div>
+    </div>
+
+    <div class="q-grid" id="questionsConsole"></div>
+  </section>
+
+  <!-- TAB 2: MC LEADERBOARD & PODIUM -->
+  <section id="tabLeaderboard" class="tab-section">
+    <div class="panel-header">
+      <div>
+        <h2 class="panel-title">Master Prediction Leaderboard</h2>
+        <p class="panel-desc">Real-time standings tallied across all settled questions (1 pt per correct answer).</p>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <button type="button" class="btn btn-gold" onclick="togglePresentationMode()">🎉 MC Stage View</button>
+        <button type="button" class="btn btn-outline" onclick="loadAllData()">↻ Refresh</button>
+      </div>
+    </div>
+
+    <!-- TOP 3 PODIUM -->
+    <div class="podium-container" id="podiumContainer"></div>
+
+    <!-- ALL GUESTS STANDINGS TABLE -->
+    <div class="table-card">
+      <div style="padding: 16px 18px; border-bottom: 1px solid #e8decb; display:flex; justify-content:space-between; align-items:center;">
+        <strong style="font-size: 1.05rem;">All Participants</strong>
+        <span style="font-size: 0.8rem; color: var(--text-muted);" id="totalParticipantsCount">0 guests</span>
+      </div>
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 70px;">Rank</th>
+              <th>Guest Name</th>
+              <th>Score</th>
+              <th>Accuracy</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="leaderboardTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAB 3: PHOTO HUNT TALLY -->
+  <section id="tabPhotos" class="tab-section">
+    <div class="panel-header">
+      <div>
+        <h2 class="panel-title">Photo Hunt Submissions</h2>
+        <p class="panel-desc">Ranked by unique categories completed (12 total active categories).</p>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <a href="https://drive.google.com/drive/folders/1rSQcuy3yNZgb6IzYOsBMlisbXov4YGLZ?usp=drive_link" target="_blank" rel="noopener" class="btn btn-gold">Open Google Drive ↗</a>
+        <button type="button" class="btn btn-outline" onclick="loadAllData()">↻ Refresh</button>
+      </div>
+    </div>
+
+    <div class="table-card" style="padding: 18px;">
+      <div id="photoLeaderboardList"></div>
+    </div>
+  </section>
+
+  <!-- TAB 4: MARKET SETTINGS & TOOLS -->
+  <section id="tabSettings" class="tab-section">
+    <div class="panel-header">
+      <div>
+        <h2 class="panel-title">Event Operations &amp; Data Tools</h2>
+        <p class="panel-desc">Lock submissions when dinner starts, export backups, or reset test data.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="switch-row">
+        <div class="switch-label">
+          <strong>Lock Guest Submissions</strong>
+          <span>Disable new prediction votes from guests once dinner/judging begins.</span>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="marketLockToggle" onchange="toggleMarketLock(this.checked)">
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div style="margin-top: 20px; display:flex; flex-wrap:wrap; gap:10px;">
+        <button type="button" class="btn btn-outline" onclick="exportPredictionsCSV()">📥 Export Predictions (CSV)</button>
+        <button type="button" class="btn btn-outline" onclick="exportPhotoClaimsCSV()">📥 Export Photo Claims (CSV)</button>
+      </div>
+
+      <div style="margin-top: 30px; padding-top: 20px; border-top: 1px dashed rgba(168, 72, 72, 0.4);">
+        <strong style="color: var(--red); display:block; margin-bottom:6px;">Danger Zone (Pre-Event)</strong>
+        <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 12px;">Wipe all test prediction entries and photo claims before the real dinner begins.</p>
+        <button type="button" class="btn btn-danger" onclick="clearDemoData()">⚠️ Wipe All Prediction Data</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+/* ==========================================================================
+   CONFIG & QUESTION DEFINITIONS (SYNCED WITH INDEX.HTML)
+   ========================================================================== */
+const ADMIN_PIN = "1003"; // Oct 3 wedding date PIN
+
+const CONFIG = {
+  supabaseUrl: "https://oywrvzfqxduofnhqcizg.supabase.co",
+  supabaseAnonKey: "sb_publishable_j5CmO4bjYp5YH4edhd7eGg_cwtXMOKP",
+  photoBucket: "wedding-photos",
+  questions: [
+    {
+      id: "cry_first",
+      text: "Who will cry first?",
+      options: ["Bride's Mom", "Bride's Dad", "Groom's Mom", "Groom's Dad"]
+    },
+    {
+      id: "speech_len",
+      text: "How long will the best friend's speech be?",
+      options: ["Under 2 min", "2 to 3 min", "3 to 5 min", "5+ min (grab a drink)"]
+    },
+    {
+      id: "courses",
+      text: "How many courses will dinner have?",
+      options: ["3 courses", "4 courses", "5 courses", "6+ courses feast"]
+    },
+    {
+      id: "fruit",
+      text: "How many pieces of fruit in the venue?",
+      options: ["200 to 400", "401 to 600", "601 to 800", "800+ pieces"]
+    },
+    {
+      id: "dinner_games",
+      text: "How many games will we play in the dinner reception?",
+      options: ["2 games", "3 games", "4 games", "5 games"]
+    },
+    {
+      id: "indo_songs",
+      text: "How many Indo songs will the band sing in the dinner reception?",
+      options: ["4 songs", "5 songs", "6 songs", "7 songs"]
+    },
+    {
+      id: "last_person_out",
+      text: "At what time will the last person leave after the party?",
+      options: ["11:30 PM", "12:00 AM", "12:30 AM", "1:00 AM"]
+    },
+    {
+      id: "after_party_food",
+      text: "What will be the after-party food?",
+      options: ["KFC", "McDonald's", "Sate Taichan", "Indomie"]
+    },
+    {
+      id: "blackout_first",
+      text: "From which group will someone blackout first?",
+      options: ["Canisius boys", "Bride's cousins", "Perth crew", "Groom himself"]
+    },
+    {
+      id: "love_first",
+      text: "Who said 'I love you' first?",
+      options: ["Jesson for sure", "Diorra without hesitation", "Said it at the same exact time", "Still debating who did!"]
+    }
+  ]
+};
+
+const db = window.supabase ? window.supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseAnonKey) : null;
+
+let allPredictions = [];
+let allPhotoClaims = [];
+let settledAnswers = {}; // { question_id: "Correct Answer" }
+let isMarketLocked = false;
+let toastTimer;
+
+/* ==========================================================================
+   PIN GATE LOGIC
+   ========================================================================== */
+function checkSavedPin() {
+  if (sessionStorage.getItem("adminAuthPin") === ADMIN_PIN) {
+    document.getElementById("pinGate").style.display = "none";
+    initDashboard();
+  }
+}
+
+function verifyPin() {
+  const entered = document.getElementById("pinInput").value.trim();
+  if (entered === ADMIN_PIN) {
+    sessionStorage.setItem("adminAuthPin", ADMIN_PIN);
+    document.getElementById("pinGate").style.display = "none";
+    initDashboard();
+  } else {
+    toast("Incorrect PIN. Please try again.");
+    document.getElementById("pinInput").value = "";
+    document.getElementById("pinInput").focus();
+  }
+}
+
+document.getElementById("pinInput").addEventListener("keyup", e => {
+  if (e.key === "Enter") verifyPin();
+});
+
+function toast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("show"), 3200);
+}
+
+/* ==========================================================================
+   DATA LOADING & REALTIME
+   ========================================================================== */
+async function loadAllData() {
+  if (!db) {
+    toast("Database client not available.");
+    return;
+  }
+
+  // 1. Fetch Predictions
+  const { data: predData } = await db.from("predictions").select("*");
+  allPredictions = predData || [];
+
+  // 2. Fetch Settled Answers
+  const { data: ansData } = await db.from("question_answers").select("*");
+  settledAnswers = {};
+  (ansData || []).forEach(row => {
+    settledAnswers[row.question_id] = row.correct_answer;
+  });
+
+  // 3. Fetch Photo Claims
+  const { data: claimData } = await db.from("photo_claims").select("*");
+  allPhotoClaims = claimData || [];
+
+  // 4. Fetch Market Settings
+  const { data: settingData } = await db.from("market_settings").select("*").eq("key", "predictions_locked").maybeSingle();
+  isMarketLocked = settingData?.value === "true";
+  const lockToggle = document.getElementById("marketLockToggle");
+  if (lockToggle) lockToggle.checked = isMarketLocked;
+
+  // Render UI
+  renderSettlementConsole();
+  renderLeaderboard();
+  renderPhotoTally();
+  updateSettledCount();
+}
+
+function updateSettledCount() {
+  const count = Object.keys(settledAnswers).length;
+  document.getElementById("settledCountText").textContent = `${count}/10`;
+}
+
+/* ==========================================================================
+   TAB 1: SETTLEMENT CONSOLE
+   ========================================================================== */
+function renderSettlementConsole() {
+  const container = document.getElementById("questionsConsole");
+  container.innerHTML = "";
+
+  CONFIG.questions.forEach((q, idx) => {
+    const isSettled = Boolean(settledAnswers[q.id]);
+    const correctAnswer = settledAnswers[q.id] || null;
+
+    const card = document.createElement("div");
+    card.className = `q-card${isSettled ? " settled" : ""}`;
+
+    // Header
+    const header = document.createElement("div");
+    header.className = "q-header";
+    header.innerHTML = `
+      <span class="q-num">Question ${idx + 1}</span>
+      <span class="q-status">${isSettled ? "✓ Settled" : "Open / Unsettled"}</span>
+    `;
+
+    // Title
+    const title = document.createElement("h3");
+    title.className = "q-title";
+    title.textContent = q.text;
+
+    // Options
+    const optList = document.createElement("div");
+    optList.className = "opt-list";
+
+    q.options.forEach(opt => {
+      const isCorrect = correctAnswer === opt;
+      const optBtn = document.createElement("button");
+      optBtn.type = "button";
+      optBtn.className = `opt-btn${isCorrect ? " correct" : ""}`;
+      optBtn.innerHTML = `
+        <span>${opt}</span>
+        <span class="check-mark">✓</span>
+      `;
+      optBtn.addEventListener("click", () => setCorrectAnswer(q.id, opt));
+      optList.appendChild(optBtn);
+    });
+
+    // Submissions Breakdown for this question
+    const qVotes = allPredictions.filter(p => p.question_id === q.id);
+    const correctVotes = isSettled ? qVotes.filter(p => p.answer === correctAnswer).length : 0;
+
+    const footer = document.createElement("div");
+    footer.className = "q-footer";
+    footer.innerHTML = `
+      <span><strong>${qVotes.length}</strong> bets placed${isSettled ? ` · <strong>${correctVotes}</strong> winner${correctVotes === 1 ? '' : 's'}` : ''}</span>
+      ${isSettled ? `<button type="button" class="unsettle-btn" onclick="unsettleAnswer('${q.id}')">✕ Unsettle</button>` : ''}
+    `;
+
+    card.append(header, title, optList, footer);
+    container.appendChild(card);
+  });
+}
+
+async function setCorrectAnswer(questionId, answer) {
+  if (!db) return;
+  settledAnswers[questionId] = answer;
+  renderSettlementConsole();
+  renderLeaderboard();
+  updateSettledCount();
+
+  const { error } = await db.from("question_answers").upsert({
+    question_id: questionId,
+    correct_answer: answer,
+    set_at: new Date().toISOString()
+  });
+
+  if (error) {
+    toast(`Error settling answer: ${error.message}`);
+  } else {
+    toast(`Answer saved: "${answer}" 🎉`);
+  }
+}
+
+async function unsettleAnswer(questionId) {
+  if (!db) return;
+  delete settledAnswers[questionId];
+  renderSettlementConsole();
+  renderLeaderboard();
+  updateSettledCount();
+
+  const { error } = await db.from("question_answers").delete().eq("question_id", questionId);
+  if (error) toast(`Error resetting answer: ${error.message}`);
+  else toast("Question unsettled.");
+}
+
+/* ==========================================================================
+   TAB 2: MC LEADERBOARD & WINNERS PODIUM
+   ========================================================================== */
+function calculateLeaderboard() {
+  const settledQIds = Object.keys(settledAnswers);
+  const userScores = {}; // { guest_name: { score: number, totalAnswered: number, answers: {} } }
+
+  allPredictions.forEach(pred => {
+    const name = pred.guest_name.trim();
+    if (!name) return;
+
+    if (!userScores[name]) {
+      userScores[name] = { name, score: 0, totalAnswered: 0, answers: {} };
+    }
+
+    userScores[name].answers[pred.question_id] = pred.answer;
+  });
+
+  // Calculate score for each participant
+  Object.values(userScores).forEach(user => {
+    user.totalAnswered = Object.keys(user.answers).length;
+    let score = 0;
+    settledQIds.forEach(qId => {
+      if (user.answers[qId] === settledAnswers[qId]) {
+        score += 1;
+      }
+    });
+    user.score = score;
+  });
+
+  // Sort descending by score, then by guest name
+  const sorted = Object.values(userScores).sort((a, b) => b.score - a.score || a.name.localeCompare(b.name));
+  return sorted;
+}
+
+function renderLeaderboard() {
+  const sortedUsers = calculateLeaderboard();
+  const totalSettled = Object.keys(settledAnswers).length;
+  const podiumContainer = document.getElementById("podiumContainer");
+  const tableBody = document.getElementById("leaderboardTableBody");
+  const countText = document.getElementById("totalParticipantsCount");
+
+  countText.textContent = `${sortedUsers.length} total participants`;
+  podiumContainer.innerHTML = "";
+  tableBody.innerHTML = "";
+
+  if (sortedUsers.length === 0) {
+    podiumContainer.innerHTML = `<div class="card" style="grid-column: 1/-1; text-align:center;"><p style="color:var(--text-muted);">No predictions submitted yet.</p></div>`;
+    tableBody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:20px; color:var(--text-muted);">Waiting for guest predictions…</td></tr>`;
+    return;
+  }
+
+  // --- PODIUM (Top 3 ranks) ---
+  const topScore = sortedUsers[0]?.score || 0;
+  const rank1Users = sortedUsers.filter(u => u.score === topScore && u.score > 0);
+  const remaining = sortedUsers.filter(u => u.score < topScore);
+  const rank2Score = remaining[0]?.score || 0;
+  const rank2Users = remaining.filter(u => u.score === rank2Score && u.score > 0);
+  const remaining3 = remaining.filter(u => u.score < rank2Score);
+  const rank3Score = remaining3[0]?.score || 0;
+  const rank3Users = remaining3.filter(u => u.score === rank3Score && u.score > 0);
+
+  // 1st Place Card(s)
+  if (rank1Users.length > 0) {
+    rank1Users.forEach(u => {
+      const card = document.createElement("div");
+      card.className = "podium-card gold";
+      card.innerHTML = `
+        <div class="podium-crown">👑</div>
+        <div class="podium-place">🥇 1st Place Winner</div>
+        <div class="podium-name">${u.name}</div>
+        <div class="podium-score">${u.score} / ${totalSettled} Correct (${totalSettled > 0 ? Math.round(u.score/totalSettled*100) : 0}%)</div>
+      `;
+      podiumContainer.appendChild(card);
+    });
+  } else {
+    podiumContainer.innerHTML = `<div class="podium-card gold"><div class="podium-crown">👑</div><div class="podium-place">1st Place</div><div class="podium-name">Settling In Progress…</div></div>`;
+  }
+
+  // 2nd Place Card(s)
+  if (rank2Users.length > 0) {
+    rank2Users.forEach(u => {
+      const card = document.createElement("div");
+      card.className = "podium-card silver";
+      card.innerHTML = `
+        <div class="podium-crown">🥈</div>
+        <div class="podium-place">2nd Place</div>
+        <div class="podium-name">${u.name}</div>
+        <div class="podium-score">${u.score} / ${totalSettled} Correct</div>
+      `;
+      podiumContainer.appendChild(card);
+    });
+  }
+
+  // 3rd Place Card(s)
+  if (rank3Users.length > 0) {
+    rank3Users.forEach(u => {
+      const card = document.createElement("div");
+      card.className = "podium-card bronze";
+      card.innerHTML = `
+        <div class="podium-crown">🥉</div>
+        <div class="podium-place">3rd Place</div>
+        <div class="podium-name">${u.name}</div>
+        <div class="podium-score">${u.score} / ${totalSettled} Correct</div>
+      `;
+      podiumContainer.appendChild(card);
+    });
+  }
+
+  // --- FULL STANDINGS TABLE ---
+  let currentRank = 1;
+  sortedUsers.forEach((u, i) => {
+    if (i > 0 && u.score < sortedUsers[i - 1].score) {
+      currentRank = i + 1;
+    }
+
+    const tr = document.createElement("tr");
+    tr.className = currentRank <= 3 ? `rank-${currentRank}` : "";
+    const pct = totalSettled > 0 ? Math.round((u.score / totalSettled) * 100) : 0;
+
+    tr.innerHTML = `
+      <td><span class="rank-pill">${currentRank}</span></td>
+      <td><strong>${u.name}</strong></td>
+      <td><strong>${u.score}</strong> / ${totalSettled}</td>
+      <td>${pct}%</td>
+      <td><span style="font-size:0.75rem; color:var(--text-muted);">${u.totalAnswered} questions picked</span></td>
+    `;
+    tableBody.appendChild(tr);
+  });
+}
+
+function togglePresentationMode() {
+  document.body.classList.toggle("presentation-mode");
+  if (document.body.classList.contains("presentation-mode")) {
+    // Switch to Leaderboard tab
+    document.querySelector('.admin-nav button[data-tab="tabLeaderboard"]').click();
+  }
+}
+
+/* ==========================================================================
+   TAB 3: PHOTO HUNT TALLY
+   ========================================================================== */
+function renderPhotoTally() {
+  const container = document.getElementById("photoLeaderboardList");
+  container.innerHTML = "";
+
+  const userClaims = {}; // { guest_name: Set<category> }
+
+  allPhotoClaims.forEach(claim => {
+    const name = claim.guest_name.trim();
+    if (!name) return;
+    if (!userClaims[name]) userClaims[name] = new Set();
+    userClaims[name].add(claim.category);
+  });
+
+  const ranked = Object.entries(userClaims)
+    .map(([name, set]) => ({ name, count: set.size, categories: Array.from(set) }))
+    .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
+
+  if (ranked.length === 0) {
+    container.innerHTML = `<p style="text-align:center; color:var(--text-muted); padding:20px;">No photo claims logged yet.</p>`;
+    return;
+  }
+
+  ranked.forEach((u, idx) => {
+    const row = document.createElement("div");
+    row.className = "photo-rank-card";
+    row.innerHTML = `
+      <div class="photo-user">
+        <span class="rank-pill">${idx + 1}</span>
+        <div>
+          <strong>${u.name}</strong>
+          <div class="category-tags">
+            ${u.categories.map(c => `<span class="cat-tag">✓ ${c}</span>`).join('')}
+          </div>
+        </div>
+      </div>
+      <div class="photo-count">${u.count} / 12 Categories</div>
+    `;
+    container.appendChild(row);
+  });
+}
+
+/* ==========================================================================
+   TAB 4: MARKET SETTINGS & CSV EXPORTS
+   ========================================================================== */
+async function toggleMarketLock(locked) {
+  if (!db) return;
+  isMarketLocked = locked;
+  const { error } = await db.from("market_settings").upsert({
+    key: "predictions_locked",
+    value: locked ? "true" : "false",
+    updated_at: new Date().toISOString()
+  });
+
+  if (error) toast(`Error updating lock state: ${error.message}`);
+  else toast(locked ? "Predictions locked! Guests cannot submit new votes." : "Predictions unlocked for guests.");
+}
+
+function exportPredictionsCSV() {
+  if (!allPredictions.length) return toast("No predictions to export.");
+  const headers = ["ID", "Created At", "Guest Name", "Question ID", "Answer"];
+  const rows = allPredictions.map(p => [
+    p.id,
+    p.created_at,
+    `"${(p.guest_name || '').replace(/"/g, '""')}"`,
+    p.question_id,
+    `"${(p.answer || '').replace(/"/g, '""')}"`
+  ]);
+
+  downloadCSV([headers, ...rows], `wedding_predictions_${Date.now()}.csv`);
+}
+
+function exportPhotoClaimsCSV() {
+  if (!allPhotoClaims.length) return toast("No photo claims to export.");
+  const headers = ["ID", "Created At", "Guest Name", "Category"];
+  const rows = allPhotoClaims.map(c => [
+    c.id,
+    c.created_at,
+    `"${(c.guest_name || '').replace(/"/g, '""')}"`,
+    `"${(c.category || '').replace(/"/g, '""')}"`
+  ]);
+
+  downloadCSV([headers, ...rows], `wedding_photo_claims_${Date.now()}.csv`);
+}
+
+function downloadCSV(dataArray, filename) {
+  const csvContent = "data:text/csv;charset=utf-8," + dataArray.map(e => e.join(",")).join("\n");
+  const encodedUri = encodeURI(csvContent);
+  const link = document.createElement("a");
+  link.setAttribute("href", encodedUri);
+  link.setAttribute("download", filename);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+async function clearDemoData() {
+  const confirm1 = window.confirm("⚠️ ARE YOU SURE? This will delete all predictions submitted so far.");
+  if (!confirm1) return;
+  const confirm2 = window.prompt("Type 'DELETE' to confirm wiping test submissions:");
+  if (confirm2 !== "DELETE") return toast("Deletion canceled.");
+
+  if (!db) return;
+  await db.from("predictions").delete().neq("id", "00000000-0000-0000-0000-000000000000");
+  await db.from("photo_claims").delete().neq("id", "00000000-0000-0000-0000-000000000000");
+  toast("All test predictions and photo claims cleared!");
+  loadAllData();
+}
+
+/* ==========================================================================
+   TABS & INITIALIZATION
+   ========================================================================== */
+document.querySelectorAll(".admin-nav button").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".admin-nav button").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".tab-section").forEach(s => s.classList.remove("active"));
+    btn.classList.add("active");
+    document.getElementById(btn.dataset.tab).classList.add("active");
+  });
+});
+
+function initDashboard() {
+  renderSettlementConsole();
+  renderLeaderboard();
+  renderPhotoTally();
+  updateSettledCount();
+  loadAllData();
+
+  if (db) {
+    db.channel("admin-realtime")
+      .on("postgres_changes", { event: "*", schema: "public", table: "predictions" }, () => loadAllData())
+      .on("postgres_changes", { event: "*", schema: "public", table: "photo_claims" }, () => loadAllData())
+      .on("postgres_changes", { event: "*", schema: "public", table: "question_answers" }, () => loadAllData())
+      .on("postgres_changes", { event: "*", schema: "public", table: "market_settings" }, () => loadAllData())
+      .subscribe();
+  }
+}
+
+// Check saved PIN on boot
+checkSavedPin();
+</script>
+</body>
+</html>

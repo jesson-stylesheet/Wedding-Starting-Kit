@@ -109,6 +109,27 @@
     padding: 0 8px;
   }
 
+  .how-to-play-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 14px;
+    padding: 6px 14px;
+    background: rgba(197, 160, 89, 0.14);
+    border: 1px solid var(--gold-border);
+    border-radius: 20px;
+    color: var(--gold-light);
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .how-to-play-trigger:hover, .how-to-play-trigger:active {
+    background: var(--gold);
+    color: #120e0c;
+  }
+
   /* Guest Identity Pill */
   .guest-strip {
     max-width: 480px;
@@ -708,6 +729,159 @@
   footer .love {
     color: var(--gold);
   }
+
+  /* Modal Popup: How to Play */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(10, 8, 6, 0.82);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 18px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+
+  .modal-backdrop.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .modal-card {
+    background: var(--bg-card);
+    color: var(--text-main);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--gold);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 30px rgba(197, 160, 89, 0.2);
+    width: 100%;
+    max-width: 520px;
+    max-height: 88vh;
+    overflow-y: auto;
+    padding: 24px 20px 20px;
+    transform: translateY(16px) scale(0.97);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+  }
+
+  .modal-backdrop.open .modal-card {
+    transform: translateY(0) scale(1);
+  }
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 1px solid rgba(197, 160, 89, 0.3);
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+  }
+
+  .modal-title-group h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--text-main);
+  }
+
+  .modal-title-group p {
+    font-size: 0.8rem;
+    color: var(--gold-dim);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .modal-close-btn {
+    background: rgba(0,0,0,0.06);
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.18s;
+  }
+
+  .modal-close-btn:hover, .modal-close-btn:active {
+    background: var(--gold);
+    color: #120e0c;
+  }
+
+  .rule-block {
+    background: #fff;
+    border: 1px solid rgba(197, 160, 89, 0.25);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+    margin-bottom: 12px;
+  }
+
+  .rule-block h4 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.96rem;
+    color: var(--text-main);
+    margin-bottom: 8px;
+  }
+
+  .rule-block ol, .rule-block ul {
+    padding-left: 20px;
+    font-size: 0.86rem;
+    color: var(--text-muted);
+    line-height: 1.55;
+  }
+
+  .rule-block li {
+    margin-bottom: 6px;
+  }
+
+  .rule-block li strong {
+    color: var(--text-main);
+  }
+
+  .prize-tag {
+    background: linear-gradient(135deg, rgba(197, 160, 89, 0.18), rgba(197, 160, 89, 0.08));
+    border: 1px dashed var(--gold);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    margin-top: 10px;
+    font-size: 0.82rem;
+    color: var(--gold-dim);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .locked-banner {
+    display: none;
+    background: linear-gradient(135deg, rgba(197, 160, 89, 0.22), rgba(197, 160, 89, 0.1));
+    border: 1px solid var(--gold);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+    margin-bottom: 16px;
+    text-align: center;
+    color: var(--ivory);
+  }
+
+  .locked-banner.active {
+    display: block;
+  }
+
+  .locked-banner strong {
+    color: var(--gold-light);
+    display: block;
+    margin-bottom: 4px;
+    font-size: 0.95rem;
+  }
 </style>
 </head>
 <body>
@@ -717,6 +891,7 @@
   <h1>Jesson &amp; Diorra</h1>
   <p class="date-venue">October 3, 2026 · Park Hyatt Jakarta</p>
   <p class="welcome-note">We are so delighted to have you celebrate with us tonight. Capture memories and place your bets below!</p>
+  <button type="button" class="how-to-play-trigger" onclick="openRulesModal()">✦ How to Play &amp; Win Prizes</button>
 </header>
 
 <div class="guest-strip" id="guestStrip" style="display:none;">

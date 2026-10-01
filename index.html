@@ -110,6 +110,27 @@
     padding: 0 8px;
   }
 
+  .how-to-play-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 14px;
+    padding: 6px 14px;
+    background: rgba(197, 160, 89, 0.14);
+    border: 1px solid var(--gold-border);
+    border-radius: 20px;
+    color: var(--gold-light);
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .how-to-play-trigger:hover, .how-to-play-trigger:active {
+    background: var(--gold);
+    color: #120e0c;
+  }
+
   /* Guest Identity Pill */
   .guest-strip {
     max-width: 480px;
@@ -715,6 +736,159 @@
   footer .love {
     color: var(--gold);
   }
+
+  /* Modal Popup: How to Play */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(10, 8, 6, 0.82);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 18px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+
+  .modal-backdrop.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .modal-card {
+    background: var(--bg-card);
+    color: var(--text-main);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--gold);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 30px rgba(197, 160, 89, 0.2);
+    width: 100%;
+    max-width: 520px;
+    max-height: 88vh;
+    overflow-y: auto;
+    padding: 24px 20px 20px;
+    transform: translateY(16px) scale(0.97);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+  }
+
+  .modal-backdrop.open .modal-card {
+    transform: translateY(0) scale(1);
+  }
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 1px solid rgba(197, 160, 89, 0.3);
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+  }
+
+  .modal-title-group h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--text-main);
+  }
+
+  .modal-title-group p {
+    font-size: 0.8rem;
+    color: var(--gold-dim);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .modal-close-btn {
+    background: rgba(0,0,0,0.06);
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.18s;
+  }
+
+  .modal-close-btn:hover, .modal-close-btn:active {
+    background: var(--gold);
+    color: #120e0c;
+  }
+
+  .rule-block {
+    background: #fff;
+    border: 1px solid rgba(197, 160, 89, 0.25);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+    margin-bottom: 12px;
+  }
+
+  .rule-block h4 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.96rem;
+    color: var(--text-main);
+    margin-bottom: 8px;
+  }
+
+  .rule-block ol, .rule-block ul {
+    padding-left: 20px;
+    font-size: 0.86rem;
+    color: var(--text-muted);
+    line-height: 1.55;
+  }
+
+  .rule-block li {
+    margin-bottom: 6px;
+  }
+
+  .rule-block li strong {
+    color: var(--text-main);
+  }
+
+  .prize-tag {
+    background: linear-gradient(135deg, rgba(197, 160, 89, 0.18), rgba(197, 160, 89, 0.08));
+    border: 1px dashed var(--gold);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    margin-top: 10px;
+    font-size: 0.82rem;
+    color: var(--gold-dim);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .locked-banner {
+    display: none;
+    background: linear-gradient(135deg, rgba(197, 160, 89, 0.22), rgba(197, 160, 89, 0.1));
+    border: 1px solid var(--gold);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+    margin-bottom: 16px;
+    text-align: center;
+    color: var(--ivory);
+  }
+
+  .locked-banner.active {
+    display: block;
+  }
+
+  .locked-banner strong {
+    color: var(--gold-light);
+    display: block;
+    margin-bottom: 4px;
+    font-size: 0.95rem;
+  }
 </style>
 </head>
 <body>
@@ -724,6 +898,7 @@
   <h1>Jesson &amp; Diorra</h1>
   <p class="date-venue">October 3, 2026 · Park Hyatt Jakarta</p>
   <p class="welcome-note">We are so delighted to have you celebrate with us tonight. Capture memories and place your bets below!</p>
+  <button type="button" class="how-to-play-trigger" onclick="openRulesModal()">✦ How to Play &amp; Win Prizes</button>
 </header>
 
 <div class="guest-strip" id="guestStrip" style="display:none;">
@@ -768,6 +943,11 @@
       <p class="section-desc">Submit your guesses for tonight's memorable moments. Live standings are updated in real-time!</p>
     </div>
 
+    <div class="locked-banner" id="lockedBanner">
+      <strong>🔒 Predictions Closed for Judging</strong>
+      Jesson &amp; Diorra are settling the answers! Check the Live Results tab to see standings.
+    </div>
+
     <div class="card">
       <label class="card-label" for="guestName">Guest Information</label>
       <h3 class="card-title">What's your name?</h3>
@@ -803,6 +983,51 @@
     <div id="resultsBoard"></div>
   </section>
 </main>
+
+<!-- HOW TO PLAY MODAL POPUP -->
+<div class="modal-backdrop" id="rulesModal" onclick="handleBackdropClick(event)">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="rulesModalTitle">
+    <div class="modal-header">
+      <div class="modal-title-group">
+        <p>Wedding Games Guide</p>
+        <h2 id="rulesModalTitle">How to Play &amp; Win 🏆</h2>
+      </div>
+      <button type="button" class="modal-close-btn" onclick="closeRulesModal()" aria-label="Close dialog">✕</button>
+    </div>
+
+    <div class="rule-block">
+      <h4><span>📷</span> 1. The Photo Hunt</h4>
+      <ol>
+        <li>Browse the 12 fun photo categories (e.g. <em>Bride &amp; Groom Kissing</em>, <em>Coolest Costume</em>, <em>Canisius Boys</em>, <em>From Perth</em>).</li>
+        <li>Tap any category to open our designated <strong>Google Drive upload folder</strong> and add your picture!</li>
+        <li>Each category you upload logs an entry in the Photo Hunt.</li>
+      </ol>
+      <div class="prize-tag">
+        <span>🎁</span>
+        <span><strong>Photo Prize:</strong> Guest with the most unique categories completed wins!</span>
+      </div>
+    </div>
+
+    <div class="rule-block">
+      <h4><span>✨</span> 2. Night Predictions</h4>
+      <ol>
+        <li>Enter your name and pick your best guess for all <strong>10 questions</strong> about the night.</li>
+        <li>Submit your predictions before dinner ends!</li>
+        <li>Track the room's live betting distribution on the <strong>📊 Live Results</strong> board.</li>
+        <li>At the end of the celebration, Jesson &amp; Diorra will lock in the real answers and crown the <strong>Grand Prediction Champion</strong>!</li>
+      </ol>
+      <div class="prize-tag">
+        <span>👑</span>
+        <span><strong>Prediction Prize:</strong> Guest with the highest score out of 10 wins!</span>
+      </div>
+    </div>
+
+    <button type="button" class="primary-btn" onclick="closeRulesModal()" style="margin-top: 14px;">
+      <span>Got It, Let's Play!</span>
+      <span>🎉</span>
+    </button>
+  </div>
+</div>
 
 <footer>
   Made with <span class="love">♥</span> for our favourite people.
@@ -1203,6 +1428,11 @@ function buildQuestions() {
 }
 
 document.getElementById("submitBtn").addEventListener("click", async event => {
+  if (isMarketLocked) {
+    toast("Predictions are closed for judging! Check Live Results.");
+    return;
+  }
+
   if (!db) {
     toast("Supabase connection required to save live predictions.");
     return;
@@ -1371,11 +1601,67 @@ if (localStorage.getItem('weddingWideResults') === 'true' ||
 updateWideToggleBtn();
 
 /* ==========================================================================
+   RULES MODAL (HOW TO PLAY)
+   ========================================================================== */
+function openRulesModal() {
+  const modal = document.getElementById('rulesModal');
+  if (modal) {
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeRulesModal() {
+  const modal = document.getElementById('rulesModal');
+  if (modal) {
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+}
+
+function handleBackdropClick(e) {
+  if (e.target && e.target.id === 'rulesModal') {
+    closeRulesModal();
+  }
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeRulesModal();
+});
+
+/* ==========================================================================
+   MARKET LOCK STATUS
+   ========================================================================== */
+let isMarketLocked = false;
+async function checkMarketLock() {
+  if (!db) return;
+  try {
+    const { data } = await db.from('market_settings').select('value').eq('key', 'predictions_locked').maybeSingle();
+    isMarketLocked = data?.value === 'true';
+    const banner = document.getElementById('lockedBanner');
+    const submitBtn = document.getElementById('submitBtn');
+    if (banner) banner.classList.toggle('active', isMarketLocked);
+    if (submitBtn) {
+      if (isMarketLocked) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span>Predictions Closed 🔒</span>';
+      } else {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<span>Submit My Predictions</span><span>🎉</span>';
+      }
+    }
+  } catch (err) {
+    console.warn('Market lock check note:', err);
+  }
+}
+
+/* ==========================================================================
    PAGE BOOTSTRAP
    ========================================================================== */
 updateGuestNameUI();
 buildPhotoTiles();
 buildQuestions();
+checkMarketLock();
 
 if (db) {
   db.channel("prediction-channel")
@@ -1383,6 +1669,9 @@ if (db) {
       if (document.getElementById("results").classList.contains("active")) {
         loadResults();
       }
+    })
+    .on("postgres_changes", { event: "*", schema: "public", table: "market_settings" }, () => {
+      checkMarketLock();
     })
     .subscribe();
 }
