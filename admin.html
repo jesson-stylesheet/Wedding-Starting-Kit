@@ -745,7 +745,7 @@
   <div class="pin-card">
     <div style="font-size: 2.2rem; margin-bottom: 8px;">🔐</div>
     <h2>Admin Access</h2>
-    <p>Enter the 4-digit host PIN to manage predictions, view MC leaderboard, and track photo claims.</p>
+    <p>Enter the 4-digit host PIN to manage predictions, view MC leaderboard, and control event voting.</p>
     <input type="password" id="pinInput" class="pin-input" maxlength="4" placeholder="••••" inputmode="numeric" pattern="[0-9]*" autofocus>
     <button type="button" class="btn btn-gold" style="width:100%; justify-content:center; min-height:46px;" onclick="verifyPin()">Unlock Dashboard</button>
   </div>
@@ -764,7 +764,6 @@
   <nav class="admin-nav" role="tablist">
     <button type="button" class="active" data-tab="tabSettle">🎯 Settle Predictions (<span id="settledCountText">0/10</span>)</button>
     <button type="button" data-tab="tabLeaderboard">🏆 MC Leaderboard</button>
-    <button type="button" data-tab="tabPhotos">📷 Photo Hunt Tally</button>
     <button type="button" data-tab="tabSettings">⚙️ Market Controls</button>
   </nav>
 </div>
@@ -824,25 +823,7 @@
     </div>
   </section>
 
-  <!-- TAB 3: PHOTO HUNT TALLY -->
-  <section id="tabPhotos" class="tab-section">
-    <div class="panel-header">
-      <div>
-        <h2 class="panel-title">Photo Hunt Submissions</h2>
-        <p class="panel-desc">Ranked by unique categories completed (12 total active categories).</p>
-      </div>
-      <div style="display:flex; gap:8px;">
-        <a href="https://drive.google.com/drive/folders/1rSQcuy3yNZgb6IzYOsBMlisbXov4YGLZ?usp=drive_link" target="_blank" rel="noopener" class="btn btn-gold">Open Google Drive ↗</a>
-        <button type="button" class="btn btn-outline" onclick="loadAllData()">↻ Refresh</button>
-      </div>
-    </div>
-
-    <div class="table-card" style="padding: 18px;">
-      <div id="photoLeaderboardList"></div>
-    </div>
-  </section>
-
-  <!-- TAB 4: MARKET SETTINGS & TOOLS -->
+  <!-- TAB 3: MARKET SETTINGS & TOOLS -->
   <section id="tabSettings" class="tab-section">
     <div class="panel-header">
       <div>
@@ -864,13 +845,13 @@
       </div>
 
       <div style="margin-top: 20px; display:flex; flex-wrap:wrap; gap:10px;">
+        <a href="https://drive.google.com/drive/folders/1rSQcuy3yNZgb6IzYOsBMlisbXov4YGLZ?usp=drive_link" target="_blank" rel="noopener" class="btn btn-gold">📁 Open Google Drive Photos ↗</a>
         <button type="button" class="btn btn-outline" onclick="exportPredictionsCSV()">📥 Export Predictions (CSV)</button>
-        <button type="button" class="btn btn-outline" onclick="exportPhotoClaimsCSV()">📥 Export Photo Claims (CSV)</button>
       </div>
 
       <div style="margin-top: 30px; padding-top: 20px; border-top: 1px dashed rgba(168, 72, 72, 0.4);">
         <strong style="color: var(--red); display:block; margin-bottom:6px;">Danger Zone (Pre-Event)</strong>
-        <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 12px;">Wipe all test prediction entries and photo claims before the real dinner begins.</p>
+        <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 12px;">Wipe all test prediction entries before the real dinner begins.</p>
         <button type="button" class="btn btn-danger" onclick="clearDemoData()">⚠️ Wipe All Prediction Data</button>
       </div>
     </div>
@@ -1007,11 +988,7 @@ async function loadAllData() {
     settledAnswers[row.question_id] = row.correct_answer;
   });
 
-  // 3. Fetch Photo Claims
-  const { data: claimData } = await db.from("photo_claims").select("*");
-  allPhotoClaims = claimData || [];
-
-  // 4. Fetch Market Settings
+  // 3. Fetch Market Settings
   const { data: settingData } = await db.from("market_settings").select("*").eq("key", "predictions_locked").maybeSingle();
   isMarketLocked = settingData?.value === "true";
   const lockToggle = document.getElementById("marketLockToggle");
@@ -1020,7 +997,6 @@ async function loadAllData() {
   // Render UI
   renderSettlementConsole();
   renderLeaderboard();
-  renderPhotoTally();
   updateSettledCount();
 }
 
@@ -1261,51 +1237,7 @@ function togglePresentationMode() {
 }
 
 /* ==========================================================================
-   TAB 3: PHOTO HUNT TALLY
-   ========================================================================== */
-function renderPhotoTally() {
-  const container = document.getElementById("photoLeaderboardList");
-  container.innerHTML = "";
-
-  const userClaims = {}; // { guest_name: Set<category> }
-
-  allPhotoClaims.forEach(claim => {
-    const name = claim.guest_name.trim();
-    if (!name) return;
-    if (!userClaims[name]) userClaims[name] = new Set();
-    userClaims[name].add(claim.category);
-  });
-
-  const ranked = Object.entries(userClaims)
-    .map(([name, set]) => ({ name, count: set.size, categories: Array.from(set) }))
-    .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
-
-  if (ranked.length === 0) {
-    container.innerHTML = `<p style="text-align:center; color:var(--text-muted); padding:20px;">No photo claims logged yet.</p>`;
-    return;
-  }
-
-  ranked.forEach((u, idx) => {
-    const row = document.createElement("div");
-    row.className = "photo-rank-card";
-    row.innerHTML = `
-      <div class="photo-user">
-        <span class="rank-pill">${idx + 1}</span>
-        <div>
-          <strong>${u.name}</strong>
-          <div class="category-tags">
-            ${u.categories.map(c => `<span class="cat-tag">✓ ${c}</span>`).join('')}
-          </div>
-        </div>
-      </div>
-      <div class="photo-count">${u.count} / 12 Categories</div>
-    `;
-    container.appendChild(row);
-  });
-}
-
-/* ==========================================================================
-   TAB 4: MARKET SETTINGS & CSV EXPORTS
+   TAB 3: MARKET SETTINGS & CSV EXPORTS
    ========================================================================== */
 async function toggleMarketLock(locked) {
   if (!db) return;
@@ -1334,19 +1266,6 @@ function exportPredictionsCSV() {
   downloadCSV([headers, ...rows], `wedding_predictions_${Date.now()}.csv`);
 }
 
-function exportPhotoClaimsCSV() {
-  if (!allPhotoClaims.length) return toast("No photo claims to export.");
-  const headers = ["ID", "Created At", "Guest Name", "Category"];
-  const rows = allPhotoClaims.map(c => [
-    c.id,
-    c.created_at,
-    `"${(c.guest_name || '').replace(/"/g, '""')}"`,
-    `"${(c.category || '').replace(/"/g, '""')}"`
-  ]);
-
-  downloadCSV([headers, ...rows], `wedding_photo_claims_${Date.now()}.csv`);
-}
-
 function downloadCSV(dataArray, filename) {
   const csvContent = "data:text/csv;charset=utf-8," + dataArray.map(e => e.join(",")).join("\n");
   const encodedUri = encodeURI(csvContent);
@@ -1366,8 +1285,7 @@ async function clearDemoData() {
 
   if (!db) return;
   await db.from("predictions").delete().neq("id", "00000000-0000-0000-0000-000000000000");
-  await db.from("photo_claims").delete().neq("id", "00000000-0000-0000-0000-000000000000");
-  toast("All test predictions and photo claims cleared!");
+  toast("All test predictions cleared!");
   loadAllData();
 }
 
@@ -1386,14 +1304,12 @@ document.querySelectorAll(".admin-nav button").forEach(btn => {
 function initDashboard() {
   renderSettlementConsole();
   renderLeaderboard();
-  renderPhotoTally();
   updateSettledCount();
   loadAllData();
 
   if (db) {
     db.channel("admin-realtime")
       .on("postgres_changes", { event: "*", schema: "public", table: "predictions" }, () => loadAllData())
-      .on("postgres_changes", { event: "*", schema: "public", table: "photo_claims" }, () => loadAllData())
       .on("postgres_changes", { event: "*", schema: "public", table: "question_answers" }, () => loadAllData())
       .on("postgres_changes", { event: "*", schema: "public", table: "market_settings" }, () => loadAllData())
       .subscribe();
