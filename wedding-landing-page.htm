@@ -42,18 +42,18 @@
 
   body {
     min-height: 100vh;
-    background-color: var(--bg-dark);
-    background-image: 
+      text: "How many bottles of wine served in the reception?",
+      options: ["5-10", "11-15", "16-20", "21+"]
       radial-gradient(ellipse at 50% 0%, rgba(197, 160, 89, 0.12) 0%, transparent 60%),
       radial-gradient(circle at 10% 40%, rgba(197, 160, 89, 0.05) 0%, transparent 40%),
       radial-gradient(circle at 90% 80%, rgba(197, 160, 89, 0.04) 0%, transparent 50%);
-    color: var(--ivory);
-    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      text: "What shoes is the bride wearing?",
+      options: ["chunky wedges", "pretty heels", "comfy flats", "sneakers ftw"]
     line-height: 1.5;
     padding-bottom: calc(40px + env(safe-area-inset-bottom, 20px));
   }
-
-  /* Header & Branding */
+      text: "what flavour is the wedding cake?",
+      options: ["Red Velvet", "Lapis Surabaya", "Bolu Coklat", "Tiramisu"]
   .masthead {
     padding: 42px 20px 22px;
     text-align: center;
@@ -1114,13 +1114,6 @@ const CONFIG = {
       name: "General Photos",
       slug: "general-photos",
       driveLink: "https://drive.google.com/drive/folders/1Qobtz-2bsbn4S9CGDlSOn4tGIKS8LhuF?usp=drive_link"
-    },
-    {
-      emoji: "➕",
-      name: "More Coming Soon",
-      slug: "",
-      soon: true,
-      driveLink: ""
     }
   ],
 

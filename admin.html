@@ -575,6 +575,178 @@
   .rank-2 .rank-pill { background: #bcc4cc; color: #120e0c; }
   .rank-3 .rank-pill { background: #dcb38f; color: #120e0c; }
 
+  /* Vote Comparison View */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+
+  .summary-card {
+    background: linear-gradient(180deg, #fffdf8, #f6efdf);
+    border: 1px solid rgba(197, 160, 89, 0.28);
+    border-radius: var(--radius-md);
+    padding: 16px 14px;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .summary-card .summary-label {
+    display: block;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--gold-dim);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .summary-card .summary-value {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: var(--text-main);
+  }
+
+  .summary-card .summary-note {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  .compare-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px;
+  }
+
+  .compare-card {
+    background: var(--bg-card);
+    color: var(--text-main);
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(197, 160, 89, 0.25);
+    border-left: 4px solid var(--gold);
+    box-shadow: var(--shadow-soft);
+    padding: 18px;
+  }
+
+  .compare-card.settled {
+    border-left-color: var(--green);
+  }
+
+  .compare-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .compare-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.03rem;
+    font-weight: 700;
+    line-height: 1.35;
+  }
+
+  .compare-badge {
+    flex: 0 0 auto;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 4px 8px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.06);
+    color: var(--text-muted);
+  }
+
+  .compare-badge.match {
+    background: rgba(78, 131, 83, 0.14);
+    color: var(--green);
+  }
+
+  .compare-badge.mismatch {
+    background: rgba(168, 72, 72, 0.14);
+    color: var(--red);
+  }
+
+  .compare-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 14px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  .meta-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: #f4eddc;
+    border: 1px solid #e4d7bf;
+  }
+
+  .vote-list {
+    display: grid;
+    gap: 10px;
+  }
+
+  .vote-row {
+    display: grid;
+    gap: 6px;
+  }
+
+  .vote-row .vote-label {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: 0.84rem;
+    font-weight: 600;
+  }
+
+  .vote-row .vote-label strong {
+    font-weight: 700;
+  }
+
+  .vote-track {
+    width: 100%;
+    height: 11px;
+    border-radius: 999px;
+    overflow: hidden;
+    background: #eadfc9;
+  }
+
+  .vote-fill {
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--gold-light), var(--gold));
+  }
+
+  .vote-fill.top {
+    background: linear-gradient(90deg, #99c6a0, var(--green));
+  }
+
+  .vote-fill.actual {
+    background: linear-gradient(90deg, #ead08b, #c5a059);
+  }
+
+  .vote-footer {
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px dashed rgba(197, 160, 89, 0.35);
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
   /* Photo Leaderboard */
   .photo-rank-card {
     display: flex;
@@ -764,6 +936,7 @@
   <nav class="admin-nav" role="tablist">
     <button type="button" class="active" data-tab="tabSettle">🎯 Settle Predictions (<span id="settledCountText">0/10</span>)</button>
     <button type="button" data-tab="tabLeaderboard">🏆 MC Leaderboard</button>
+    <button type="button" data-tab="tabCompare">📊 Vote vs Answer</button>
     <button type="button" data-tab="tabSettings">⚙️ Market Controls</button>
   </nav>
 </div>
@@ -823,7 +996,23 @@
     </div>
   </section>
 
-  <!-- TAB 3: MARKET SETTINGS & TOOLS -->
+  <!-- TAB 3: VOTE VS ANSWER COMPARISON -->
+  <section id="tabCompare" class="tab-section">
+    <div class="panel-header">
+      <div>
+        <h2 class="panel-title">Vote Results vs Final Answers</h2>
+        <p class="panel-desc">See how guest predictions lined up with your settled answers, question by question.</p>
+      </div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <button type="button" class="btn btn-outline" onclick="loadAllData()">↻ Refresh</button>
+      </div>
+    </div>
+
+    <div class="summary-grid" id="comparisonSummary"></div>
+    <div class="compare-grid" id="comparisonGrid"></div>
+  </section>
+
+  <!-- TAB 4: MARKET SETTINGS & TOOLS -->
   <section id="tabSettings" class="tab-section">
     <div class="panel-header">
       <div>
@@ -904,18 +1093,18 @@ const CONFIG = {
     },
     {
       id: "last_person_out",
-      text: "At what time will the last person leave after the party?",
-      options: ["11:30 PM", "12:00 AM", "12:30 AM", "1:00 AM"]
+      text: "How many bottles of wine served in the reception?",
+      options: ["5-10", "11-15", "16-20", "21+"]
     },
     {
       id: "after_party_food",
-      text: "What will be the after-party food?",
-      options: ["KFC", "McDonald's", "Sate Taichan", "Indomie"]
+      text: "What shoes is the bride wearing?",
+      options: ["chunky wedges", "pretty heels", "comfy flats", "sneakers ftw"]
     },
     {
       id: "blackout_first",
-      text: "From which group will someone blackout first?",
-      options: ["Canisius boys", "Bride's cousins", "Perth crew", "Groom himself"]
+      text: "what flavour is the wedding cake?",
+      options: ["Red Velvet", "Lapis Surabaya", "Bolu Coklat", "Tiramisu"]
     },
     {
       id: "love_first",
@@ -997,6 +1186,7 @@ async function loadAllData() {
   // Render UI
   renderSettlementConsole();
   renderLeaderboard();
+  renderComparisonView();
   updateSettledCount();
 }
 
@@ -1225,6 +1415,124 @@ function renderLeaderboard() {
       <td><span style="font-size:0.75rem; color:var(--text-muted);">${u.totalAnswered} questions picked</span></td>
     `;
     tableBody.appendChild(tr);
+  });
+}
+
+function renderComparisonView() {
+  const summaryEl = document.getElementById("comparisonSummary");
+  const gridEl = document.getElementById("comparisonGrid");
+  if (!summaryEl || !gridEl) return;
+
+  const totalQuestions = CONFIG.questions.length;
+  const settledCount = Object.keys(settledAnswers).length;
+  let matchCount = 0;
+  let totalVotes = 0;
+
+  summaryEl.innerHTML = "";
+  gridEl.innerHTML = "";
+
+  CONFIG.questions.forEach(q => {
+    const votes = allPredictions.filter(p => p.question_id === q.id);
+    const counts = {};
+    q.options.forEach(option => { counts[option] = 0; });
+    votes.forEach(pred => {
+      if (Object.prototype.hasOwnProperty.call(counts, pred.answer)) {
+        counts[pred.answer] += 1;
+      }
+    });
+
+    const correctAnswer = settledAnswers[q.id] || null;
+    const topEntry = Object.entries(counts).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))[0] || [null, 0];
+    const topAnswer = topEntry[0];
+    const hasVotes = votes.length > 0;
+    const matched = Boolean(correctAnswer && topAnswer && correctAnswer === topAnswer);
+    if (matched) matchCount += 1;
+    totalVotes += votes.length;
+
+    const card = document.createElement("article");
+    card.className = `compare-card${correctAnswer ? " settled" : ""}`;
+
+    const header = document.createElement("div");
+    header.className = "compare-header";
+    header.innerHTML = `
+      <div class="compare-title">${q.text}</div>
+      <span class="compare-badge ${correctAnswer ? (matched ? "match" : "mismatch") : ""}">
+        ${correctAnswer ? (matched ? "Match" : "Mismatch") : "Pending"}
+      </span>
+    `;
+
+    const meta = document.createElement("div");
+    meta.className = "compare-meta";
+    meta.innerHTML = `
+      <span class="meta-pill">Votes: <strong>${votes.length}</strong></span>
+      <span class="meta-pill">Top vote: <strong>${hasVotes ? topAnswer : "No votes yet"}</strong></span>
+      <span class="meta-pill">Actual: <strong>${correctAnswer || "Unsettled"}</strong></span>
+    `;
+
+    const list = document.createElement("div");
+    list.className = "vote-list";
+
+    q.options.forEach(option => {
+      const count = counts[option] || 0;
+      const pct = votes.length > 0 ? Math.round((count / votes.length) * 100) : 0;
+      const isActual = correctAnswer === option;
+      const isTop = topAnswer === option && votes.length > 0;
+
+      const row = document.createElement("div");
+      row.className = "vote-row";
+      row.innerHTML = `
+        <div class="vote-label">
+          <span>${option}${isActual ? " · actual answer" : ""}${isTop ? " · top vote" : ""}</span>
+          <strong>${count} (${pct}%)</strong>
+        </div>
+        <div class="vote-track">
+          <div class="vote-fill ${isActual ? "actual" : ""} ${isTop ? "top" : ""}" style="width:${pct}%"></div>
+        </div>
+      `;
+      list.appendChild(row);
+    });
+
+    const footer = document.createElement("div");
+    footer.className = "vote-footer";
+    footer.innerHTML = `
+      <span>${correctAnswer ? "Final answer saved." : "Waiting for your final answer."}</span>
+      <span>${matched ? "Guests were correct on the leading answer." : (correctAnswer ? "Guests picked a different leader." : "Vote leader will be revealed after settlement.")}</span>
+    `;
+
+    card.append(header, meta, list, footer);
+    gridEl.appendChild(card);
+  });
+
+  const matchRate = settledCount > 0 ? Math.round((matchCount / settledCount) * 100) : 0;
+  const avgVotes = totalQuestions > 0 ? (totalVotes / totalQuestions).toFixed(1) : "0.0";
+
+  const summaryCards = [
+    {
+      label: "Settled questions",
+      value: `${settledCount}/${totalQuestions}`,
+      note: settledCount === totalQuestions ? "All questions have a final answer." : "Some questions are still waiting on your final call."
+    },
+    {
+      label: "Top-vote match rate",
+      value: `${matchRate}%`,
+      note: settledCount > 0 ? `${matchCount} settled questions matched the top guest vote.` : "Settle at least one question to see match data."
+    },
+    {
+      label: "Average votes per question",
+      value: avgVotes,
+      note: "Useful for spotting the most active questions."
+    }
+  ];
+
+  summaryCards.forEach(item => {
+    const el = document.createElement("div");
+    el.className = "summary-card";
+    el.innerHTML = `
+      <span class="summary-label">${item.label}</span>
+      <div class="summary-value">${item.value}</div>
+      <span class="summary-note">${item.note}</span>
+    `;
+    summaryEl.appendChild(el);
   });
 }
 
