@@ -1262,9 +1262,9 @@ function editGuestName() {
   }
 }
 
-function getGuestName() {
+function getGuestName(promptIfMissing = true) {
   let name = (nameInput.value.trim() || sessionStorage.getItem("weddingGuestName") || "").trim();
-  if (!name) {
+  if (!name && promptIfMissing) {
     const promptName = window.prompt("What is your name? (So you're entered in the Photo Hunt prize!)");
     if (promptName && promptName.trim()) {
       name = promptName.trim();
@@ -1337,8 +1337,7 @@ function buildPhotoTiles() {
 }
 
 async function handlePhotoCategoryClick(category) {
-  const name = getGuestName();
-  if (!name) return;
+  const name = getGuestName(false) || "Guest";
 
   // Determine Google Drive link
   let targetUrl = category.driveLink;
